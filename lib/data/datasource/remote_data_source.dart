@@ -4,17 +4,76 @@ import 'package:chat_translator/core/error/exceptions.dart';
 import 'package:chat_translator/core/network/api_constance.dart';
 import 'package:chat_translator/core/network/error_message_model.dart';
 import 'package:chat_translator/data/models/user_model.dart';
+import 'package:chat_translator/data/network/firebase_auth.dart';
+import 'package:chat_translator/data/network/firebase_store.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:http/http.dart';
 
 abstract class RemoteDataSource {
-  Future<String> translateMsgToFriendLang(String friendLanguage, String myMessage);
+  Future<String> registerWithEmailAndPassword(String fullName, String firstLanguage, String email, String password);
+  Future<String> addNewUserToFiresbase(UserModel userModel);
+  Future<String> loginWithEmailAndPassword(String email, String password);
   Future<List<UserModel>> getAllUsers();
+  Future<String> translateMsgToFriendLang(String friendLanguage, String myMessage);
+  Future<void> sentMessageToUserFirebase(MessageModel message);
   Future<List<MessageModel>> getMessagesByFriendId(String myFriendId);
-  void sentTranslatedMsgToFriendFirebase(String translatedMsg);
-  void sentMessageToUserFirebase(String message);
+  Future<void> sentTranslatedMsgToFriendFirebase(MessageModel translatedMsg);
 }
 
 class RemoteDataSourceImpl implements RemoteDataSource {
+  final FirebaseAuthentication _firebaseAuthentication;
+  final FirebaseStore _firebaseStore;
+
+  RemoteDataSourceImpl(this._firebaseAuthentication, this._firebaseStore);
+  @override
+  Future<String> registerWithEmailAndPassword(
+    String fullName,
+    String firstLanguage,
+    String email,
+    String password,
+  ) async {
+    try {
+      var id = await _firebaseAuthentication.registerWithEmailAndPassword(email, password);
+      print("registerWithEmailAndPassword");
+      return id;
+
+      // return await _firebaseStore.addNewUserToFirestore(
+      //   UserModel(
+      //     fullName,
+      //     'image',
+      //     id,
+      //     email,
+      //     firstLanguage,
+      //   ),
+      // );
+    } on FirebaseException catch (e) {
+      print("error registerWithEmailAndPassword");
+      print(e.message);
+      // ignore: use_rethrow_when_possible
+      throw e;
+    }
+  }
+
+  @override
+  Future<String> addNewUserToFiresbase(UserModel userModel) async {
+    try {
+      return await _firebaseStore.addNewUserToFirestore(userModel);
+    } on FirebaseException catch (e) {
+      print("error addNewUserToFiresbase");
+      print(e);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<String> loginWithEmailAndPassword(String email, String password) async {
+    try {
+      return await _firebaseAuthentication.loginWithEmailAndPassword(email, password);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
   @override
   Future<String> translateMsgToFriendLang(String friendLanguage, String myMessage) async {
     final url = Uri.parse(ApiConstance.baseUrl);
@@ -53,24 +112,43 @@ class RemoteDataSourceImpl implements RemoteDataSource {
   }
 
   @override
-  Future<List<UserModel>> getAllUsers() {
-    // TODO: implement getAllUsers
-    throw UnimplementedError();
+  Future<List<UserModel>> getAllUsers() async {
+    try {
+      List<UserModel> usersList = await _firebaseStore.getAllUsers();
+      return usersList;
+    } on FirebaseException catch (e) {
+      print("Error getting all users: $e");
+      rethrow;
+    }
   }
 
   @override
-  Future<List<MessageModel>> getMessagesByFriendId(String myFriendId) {
-    // TODO: implement getMessagesByFriendId
-    throw UnimplementedError();
+  Future<void> sentMessageToUserFirebase(MessageModel message) async {
+    try {
+      _firebaseStore.sentMessageToUserFirebase(message);
+    } on FirebaseException catch (e) {
+      print("errro sentMessageToUserFirebase $e");
+      rethrow;
+    }
   }
 
   @override
-  void sentMessageToUserFirebase(String message) {
-    // TODO: implement sentMessageToUserFirebase
+  Future<void> sentTranslatedMsgToFriendFirebase(MessageModel translatedMsg) async {
+    try {
+      _firebaseStore.sentTranslatedMsgToFriendFirebase(translatedMsg);
+    } on FirebaseException catch (e) {
+      print("errro sentTranslatedMsgToFriendFirebase $e");
+      rethrow;
+    }
   }
 
   @override
-  void sentTranslatedMsgToFriendFirebase(String translatedMsg) {
-    // TODO: implement sentTranslatedMsgToFriendFirebase
+  Future<List<MessageModel>> getMessagesByFriendId(String myFriendId) async {
+    try {
+      return await _firebaseStore.getMessagesByFriendId(myFriendId);
+    } on FirebaseException {
+      print("errro getMessagesByFriendId");
+      rethrow;
+    }
   }
 }
