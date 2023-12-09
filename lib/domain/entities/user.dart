@@ -1,11 +1,11 @@
-class User {
+class Customer {
   String fullName;
   String image;
   String id;
   String email;
   String firstLanguage;
 
-  User(
+  Customer(
     this.fullName,
     this.image,
     this.id,

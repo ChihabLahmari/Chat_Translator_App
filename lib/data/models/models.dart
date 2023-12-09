@@ -1,7 +1,7 @@
 import 'package:chat_translator/domain/entities/user.dart';
 
-class UserModel extends User {
-  UserModel(
+class CustomerModel extends Customer {
+  CustomerModel(
     super.fullName,
     super.image,
     super.id,
@@ -9,8 +9,8 @@ class UserModel extends User {
     super.firstLanguage,
   );
 
-  factory UserModel.fromJson(Map<String, dynamic> json) {
-    return UserModel(
+  factory CustomerModel.fromJson(Map<String, dynamic> json) {
+    return CustomerModel(
       json['fullName'],
       json['image'],
       json['id'],
@@ -50,7 +50,7 @@ class MessageModel extends Message {
   Map<String, dynamic> toJson() {
     return {
       "text": text,
-      "date": dateTime,
+      "dateTime": dateTime,
       "receiverId": receiverId,
       "senderId": senderId,
     };

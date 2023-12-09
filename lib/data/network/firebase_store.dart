@@ -1,14 +1,14 @@
 import 'package:chat_translator/core/constances.dart';
-import 'package:chat_translator/data/models/user_model.dart';
+import 'package:chat_translator/data/models/models.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 abstract class FirebaseStore {
-  Future<String> addNewUserToFirestore(UserModel userModel);
-  Future<UserModel> getUserDataById(String id);
-  Future<List<UserModel>> getAllUsers();
+  Future<String> addNewUserToFirestore(CustomerModel userModel);
+  Future<CustomerModel> getUserDataById(String id);
+  Future<List<CustomerModel>> getAllUsers();
   Future<void> sentMessageToUserFirebase(MessageModel message);
   Future<void> sentTranslatedMsgToFriendFirebase(MessageModel translatedMsg);
-  Future<List<MessageModel>> getMessagesByFriendId(String myFriendId);
+  Future<List<MessageModel>> getMessagesByFriendId(String myFriendId, String myId);
 }
 
 class FirebaseStoreImpl implements FirebaseStore {
@@ -17,7 +17,7 @@ class FirebaseStoreImpl implements FirebaseStore {
   FirebaseStoreImpl(this._firebaseFirestore);
 
   @override
-  Future<String> addNewUserToFirestore(UserModel userModel) async {
+  Future<String> addNewUserToFirestore(CustomerModel userModel) async {
     try {
       await _firebaseFirestore.collection(FirebaseConstance.users).doc(userModel.id).set(
             userModel.toJson(),
@@ -31,12 +31,12 @@ class FirebaseStoreImpl implements FirebaseStore {
   }
 
   @override
-  Future<UserModel> getUserDataById(String id) async {
+  Future<CustomerModel> getUserDataById(String id) async {
     try {
       return await _firebaseFirestore.collection(FirebaseConstance.users).doc(id).get().then(
         (value) {
           print(value.data());
-          return UserModel.fromJson(value.data()!);
+          return CustomerModel.fromJson(value.data()!);
         },
       ).catchError((onError) {
         print("🫣🫣");
@@ -51,14 +51,14 @@ class FirebaseStoreImpl implements FirebaseStore {
   }
 
   @override
-  Future<List<UserModel>> getAllUsers() async {
+  Future<List<CustomerModel>> getAllUsers() async {
     try {
       QuerySnapshot querySnapshot = await _firebaseFirestore.collection(FirebaseConstance.users).get();
 
-      List<UserModel> usersList = [];
+      List<CustomerModel> usersList = [];
 
       for (var doc in querySnapshot.docs) {
-        usersList.add(UserModel.fromJson(doc.data() as Map<String, dynamic>));
+        usersList.add(CustomerModel.fromJson(doc.data() as Map<String, dynamic>));
       }
 
       return usersList;
@@ -103,13 +103,12 @@ class FirebaseStoreImpl implements FirebaseStore {
   }
 
   @override
-  Future<List<MessageModel>> getMessagesByFriendId(String myFriendId) async {
+  Future<List<MessageModel>> getMessagesByFriendId(String myFriendId, String myId) async {
     try {
       List<MessageModel> messageList = [];
       QuerySnapshot querySnapshot = await _firebaseFirestore
           .collection(FirebaseConstance.users)
-          //TODO: change this :: line to the user id that stored in the local storage
-          .doc("ulndN50HslQ1TcUEEXwqukI1e1d2")
+          .doc(myId)
           .collection(FirebaseConstance.chats)
           .doc(myFriendId)
           .collection(FirebaseConstance.messages)
