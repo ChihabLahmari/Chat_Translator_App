@@ -1,4 +1,4 @@
-import 'package:chat_translator/domain/entities/user.dart';
+import 'package:chat_translator/domain/entities/entities.dart';
 
 class CustomerModel extends Customer {
   CustomerModel(

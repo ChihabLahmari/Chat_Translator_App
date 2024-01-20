@@ -1,5 +1,5 @@
 import 'package:chat_translator/core/error/failure.dart';
-import 'package:chat_translator/domain/entities/user.dart';
+import 'package:chat_translator/domain/entities/entities.dart';
 import 'package:dartz/dartz.dart';
 
 abstract class Repository {

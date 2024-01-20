@@ -1,3 +1,4 @@
+import 'package:chat_translator/core/services/services_locator.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
@@ -5,11 +6,8 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
 
-  // RemoteDataSourceImpl remoteDataSourceImpl = RemoteDataSourceImpl(
-  //     FirebaseAuthenticationImpl(FirebaseAuth.instance), FirebaseStoreImpl(FirebaseFirestore.instance));
+  ServiceLocator().init();
 
-  // List<MessageModel> list = await remoteDataSourceImpl.getMessagesByFriendId("a;sldkjfa;lskdjfa;ls");
-  // print(list.first.toJson());
   runApp(const MainApp());
 }
 

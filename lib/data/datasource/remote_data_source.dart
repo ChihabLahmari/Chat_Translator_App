@@ -27,9 +27,7 @@ class RemoteDataSourceImpl implements RemoteDataSource {
   RemoteDataSourceImpl(this._firebaseAuthentication, this._firebaseStore);
   @override
   Future<String> registerWithEmailAndPassword(String email, String password) async {
-    var id = await _firebaseAuthentication.registerWithEmailAndPassword(email, password);
-    print("registerWithEmailAndPassword");
-    return id;
+    return await _firebaseAuthentication.registerWithEmailAndPassword(email, password);
   }
 
   @override

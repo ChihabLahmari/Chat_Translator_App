@@ -1,4 +1,4 @@
-import 'package:chat_translator/core/constances.dart';
+import 'package:chat_translator/core/utlis/constances.dart';
 import 'package:chat_translator/data/models/models.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
