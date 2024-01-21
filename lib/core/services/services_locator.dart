@@ -1,3 +1,4 @@
+import 'package:chat_translator/core/services/shared_prefrences.dart';
 import 'package:chat_translator/data/datasource/remote_data_source.dart';
 import 'package:chat_translator/data/network/firebase_auth.dart';
 import 'package:chat_translator/data/network/firebase_store.dart';
@@ -8,12 +9,18 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 final getIt = GetIt.instance;
 
 class ServiceLocator {
-  void init() {
-    //network info
+  Future<void> init() async {
+    // shared prefrences
+    SharedPreferences sharedPrefs = await SharedPreferences.getInstance();
+    getIt.registerLazySingleton<SharedPreferences>(() => sharedPrefs);
+    getIt.registerLazySingleton<AppPrefernces>(() => AppPrefernces(getIt()));
+
+    // network info
     getIt.registerLazySingleton<NetworkInfo>(() => NetworkInfoImpl(InternetConnectionChecker()));
 
     // Firebase auth
