@@ -1,10 +1,12 @@
 import 'package:chat_translator/presentation/components/appsize.dart';
+import 'package:chat_translator/presentation/components/assets_manager.dart';
 import 'package:chat_translator/presentation/components/color_manager.dart';
 import 'package:chat_translator/presentation/components/styles_manager.dart';
 import 'package:cherry_toast/cherry_toast.dart';
 import 'package:cherry_toast/resources/arrays.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:lottie/lottie.dart';
 
 Widget customFormField({
   required TextEditingController textEditingcontroller,
@@ -169,5 +171,20 @@ CherryToast successToast(String msg) {
     title: Text(msg, style: TextStyle(color: ColorManager.orange)),
     toastPosition: Position.bottom,
     toastDuration: const Duration(seconds: 5),
+  );
+}
+
+// Loading Screen ::
+
+Container loadingScreen() {
+  return Container(
+    color: ColorManager.white,
+    child: Center(
+      child: SizedBox(
+        height: AppSize.s200.sp,
+        width: AppSize.s200.sp,
+        child: Lottie.asset(LottieAsset.loading, fit: BoxFit.contain),
+      ),
+    ),
   );
 }

@@ -12,4 +12,7 @@ class AppStrings {
   static String name = "name";
   static String image = "image";
   static String firstLanguage = "first language";
+
+  // main
+  static String appName = 'Chat AI';
 }

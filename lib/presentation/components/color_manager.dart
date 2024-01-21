@@ -15,10 +15,14 @@ class ColorManager {
   // static Color blackBlue = const Color(0xff1E1E29);
 
   static Color orange = const Color(0xffF86320);
-  static Color whiteOrange = const Color(0xffFBECE6);
+  static Color whiteOrange = const Color.fromARGB(255, 246, 178, 149);
+  // static Color whiteOrange = const Color(0xffFBECE6);
   static Color white = const Color(0xffFCFCFC);
   static Color whiteGrey = const Color(0xFFEEEFF5);
   static Color grey = const Color(0xffD3D3D3);
+  static Color darkGrey = const Color(0xff5A5A5A);
   static Color red = const Color(0xffe61f34);
+  static Color blue = const Color(0xffBFE0F0);
+  static Color purple = const Color(0xffD3CCF0);
   static Color dark = const Color.fromARGB(255, 24, 24, 24);
 }

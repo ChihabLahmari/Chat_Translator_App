@@ -3,6 +3,7 @@ import 'package:chat_translator/presentation/components/color_manager.dart';
 import 'package:chat_translator/presentation/components/font_manager.dart';
 import 'package:chat_translator/presentation/components/styles_manager.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 ThemeData getApplicationTheme() {
@@ -19,18 +20,18 @@ ThemeData getApplicationTheme() {
     // APP BAR :
     appBarTheme: AppBarTheme(
       centerTitle: true,
-      elevation: AppSize.s4.sp,
-      color: ColorManager.whiteOrange,
-      iconTheme: IconThemeData(color: ColorManager.whiteGrey),
-      titleTextStyle: getMeduimStyle(color: ColorManager.whiteGrey),
-      // systemOverlayStyle: const SystemUiOverlayStyle(
-      //   // Status bar color
-      //   statusBarColor: Colors.red,
+      elevation: 0,
+      color: Colors.transparent,
+      iconTheme: IconThemeData(color: ColorManager.orange),
+      titleTextStyle: getlargeStyle(color: ColorManager.orange),
+      systemOverlayStyle: const SystemUiOverlayStyle(
+        // Status bar color
+        statusBarColor: Colors.red,
 
-      //   // Status bar brightness (optional)
-      //   statusBarIconBrightness: Brightness.dark, // For Android (dark icons)
-      //   statusBarBrightness: Brightness.light, // For iOS (dark icons)
-      // ),
+        // Status bar brightness (optional)
+        statusBarIconBrightness: Brightness.dark, // For Android (dark icons)
+        statusBarBrightness: Brightness.light, // For iOS (dark icons)
+      ),
     ),
 
     // BUTTON :
