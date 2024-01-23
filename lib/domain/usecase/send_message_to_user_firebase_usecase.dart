@@ -3,12 +3,12 @@ import 'package:chat_translator/domain/entities/entities.dart';
 import 'package:chat_translator/domain/repository/repository.dart';
 import 'package:dartz/dartz.dart';
 
-class SentTranslatedMessageToFirebaseUsecase {
+class SendMessagetoUserFirebaseUsecase {
   final Repository _repository;
 
-  SentTranslatedMessageToFirebaseUsecase(this._repository);
+  SendMessagetoUserFirebaseUsecase(this._repository);
 
-  Future<Either<Failure, void>> execute(Message translatedMsg) async {
-    return await _repository.sentTranslatedMsgToFriendFirebase(translatedMsg);
+  Future<Either<Failure, void>> execute(Message message) async {
+    return await _repository.sentMessageToUserFirebase(message);
   }
 }

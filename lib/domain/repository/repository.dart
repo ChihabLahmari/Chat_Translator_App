@@ -12,4 +12,5 @@ abstract class Repository {
   Future<Either<Failure, String>> translateMsgToFriendLang(String friendLang, String message);
   Future<Either<Failure, void>> sentMessageToUserFirebase(Message message);
   Future<Either<Failure, void>> sentTranslatedMsgToFriendFirebase(Message translatedMsg);
+  Stream<List<Message>> getStreamMessages(String myFriendId, String myId);
 }

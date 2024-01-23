@@ -15,4 +15,8 @@ class AppStrings {
 
   // main
   static String appName = 'Chat AI';
+
+  // chat
+  static String typing = 'typing...';
+  static String typeAMessage = 'Type a message';
 }

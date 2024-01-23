@@ -1,7 +1,7 @@
 import 'package:chat_translator/core/services/services_locator.dart';
 import 'package:chat_translator/core/services/shared_prefrences.dart';
 import 'package:chat_translator/presentation/components/theme_manager.dart';
-import 'package:chat_translator/presentation/screens/login/view/login_view.dart';
+import 'package:chat_translator/presentation/screens/auth/login/view/login_view.dart';
 import 'package:chat_translator/presentation/screens/main/cubit/main_cubit.dart';
 import 'package:chat_translator/presentation/screens/main/view/main_view.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -30,9 +30,7 @@ class MainApp extends StatelessWidget {
     bool isUserLoggedIn = appPrefernces.isUserLoggedIn();
     return MultiBlocProvider(
       providers: [
-        BlocProvider(
-          create: (context) => MainCubit()..getAllUsers(),
-        ),
+        BlocProvider(create: (context) => MainCubit()..getAllUsers()),
       ],
       child: ScreenUtilInit(
         designSize: const Size(430, 932),

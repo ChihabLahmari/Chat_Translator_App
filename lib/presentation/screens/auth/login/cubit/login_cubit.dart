@@ -5,7 +5,7 @@ import 'package:chat_translator/core/services/shared_prefrences.dart';
 import 'package:chat_translator/domain/usecase/login_with_email_password_usecase.dart';
 import 'package:chat_translator/presentation/components/constances.dart';
 import 'package:chat_translator/presentation/components/strings_manager.dart';
-import 'package:chat_translator/presentation/screens/login/cubit/login_state.dart';
+import 'package:chat_translator/presentation/screens/auth/login/cubit/login_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

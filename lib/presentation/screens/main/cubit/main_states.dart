@@ -11,3 +11,17 @@ class MainGetAllUsersErrorState extends MainStates {
 
   MainGetAllUsersErrorState(this.error);
 }
+
+class MainGetUserDataLoadingState extends MainStates {}
+
+class MainGetUserDataSuccessState extends MainStates {}
+
+class MainGetUserDataErrorState extends MainStates {
+  final String error;
+
+  MainGetUserDataErrorState(this.error);
+}
+
+class MainGetUserIdState extends MainStates {}
+
+class MainGetMyUserState extends MainStates {}

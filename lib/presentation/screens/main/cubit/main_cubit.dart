@@ -1,4 +1,5 @@
 import 'package:chat_translator/core/services/services_locator.dart';
+import 'package:chat_translator/core/services/shared_prefrences.dart';
 import 'package:chat_translator/domain/entities/entities.dart';
 import 'package:chat_translator/domain/usecase/get_all_users_usecase.dart';
 import 'package:chat_translator/presentation/screens/main/cubit/main_states.dart';
@@ -11,7 +12,19 @@ class MainCubit extends Cubit<MainStates> {
 
   final GetAllusersUsecase _getAllusersUsecase = GetAllusersUsecase(getIt());
 
+  // final GetUserDataByIdUsecase _getUserDataByIdUsecase = GetUserDataByIdUsecase(getIt());
+
+  final AppPrefernces _appPrefernces = AppPrefernces(getIt());
+
   List<Customer> users = [];
+  String userId = '';
+  Customer? user;
+
+  Future<void> getUserId() async {
+    userId = await _appPrefernces.getUserId();
+    print('userId$userId');
+    emit(MainGetUserIdState());
+  }
 
   void getAllUsers() async {
     emit(MainGetAllUsersLoadingState());
@@ -19,17 +32,30 @@ class MainCubit extends Cubit<MainStates> {
       (failure) {
         emit(MainGetAllUsersErrorState(failure.message));
       },
-      (data) {
-        users = data + data + data;
+      (data) async {
+        users = data;
+        getUserId().then((value) => getMyUser());
         emit(MainGetAllUsersSuccessState());
       },
     );
   }
 
-  String getImage(String imageNum) {
-    if (imageNum == '0') return 'assets/images/boySticker.png';
-    if (imageNum == '1') return 'assets/images/girlSticker.png';
-    if (imageNum == '2') return 'assets/images/belliSticker.png';
-    return 'assets/images/boySticker.png';
+  getMyUser() {
+    user = users.where((customer) => customer.id == userId).first;
+    users.removeWhere((customer) => customer.id == userId);
+    emit(MainGetMyUserState());
   }
+
+  // void getUserData() async {
+  //   emit(MainGetUserDataLoadingState());
+  //   (await _getUserDataByIdUsecase.execute(await _appPrefernces.getUserId())).fold(
+  //     (failure) {
+  //       emit(MainGetUserDataErrorState(failure.message));
+  //     },
+  //     (data) {
+  //       user = data;
+  //       emit(MainGetUserDataSuccessState());
+  //     },
+  //   );
+  // }
 }

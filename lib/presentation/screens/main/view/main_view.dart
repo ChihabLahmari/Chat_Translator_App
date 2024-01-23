@@ -1,10 +1,12 @@
 import 'package:chat_translator/domain/entities/entities.dart';
 import 'package:chat_translator/presentation/components/appsize.dart';
 import 'package:chat_translator/presentation/components/color_manager.dart';
+import 'package:chat_translator/presentation/components/constances.dart';
 import 'package:chat_translator/presentation/components/font_manager.dart';
 import 'package:chat_translator/presentation/components/strings_manager.dart';
 import 'package:chat_translator/presentation/components/styles_manager.dart';
 import 'package:chat_translator/presentation/components/widgets.dart';
+import 'package:chat_translator/presentation/screens/chat/view/chat_view.dart';
 import 'package:chat_translator/presentation/screens/main/cubit/main_cubit.dart';
 import 'package:chat_translator/presentation/screens/main/cubit/main_states.dart';
 import 'package:flutter/material.dart';
@@ -105,7 +107,7 @@ class TabBarContainer extends StatelessWidget {
     return Container(
       height: AppSize.s60.sp,
       decoration: BoxDecoration(
-        color: ColorManager.orange.withOpacity(0.20),
+        color: ColorManager.whiteOrange,
         borderRadius: BorderRadius.circular(AppPadding.p12.sp),
       ),
       child: TabBar(
@@ -166,7 +168,10 @@ class UserListview extends StatelessWidget {
       shrinkWrap: true,
       itemBuilder: (context, index) {
         var user = cubit.users[index];
-        return UserListtile(user: user, cubit: cubit);
+        return UserListtile(
+          user: user,
+          cubit: cubit,
+        );
       },
     );
   }
@@ -184,74 +189,88 @@ class UserListtile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: EdgeInsets.all(AppPadding.p8.sp).copyWith(bottom: AppPadding.p12.sp),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          CircleAvatar(
-            backgroundColor: user.image == '1' ? ColorManager.purple : ColorManager.blue,
-            minRadius: AppSize.s35.sp,
-            maxRadius: AppSize.s35.sp,
-            child: Center(
-              child: Image(image: AssetImage(cubit.getImage(user.image))),
+    return InkWell(
+      onTap: () {
+        if (cubit.user != null) {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ChatView(
+                  friendData: user,
+                  myData: cubit.user!,
+                ),
+              ));
+        }
+      },
+      child: Container(
+        width: double.infinity,
+        padding: EdgeInsets.all(AppPadding.p8.sp).copyWith(bottom: AppPadding.p12.sp),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            CircleAvatar(
+              backgroundColor: user.image == '1' ? ColorManager.purple : ColorManager.blue,
+              minRadius: AppSize.s35.sp,
+              maxRadius: AppSize.s35.sp,
+              child: Center(
+                child: Image(image: AssetImage(PresentationConstances.getImage(user.image))),
+              ),
             ),
-          ),
-          SizedBox(
-            width: AppSize.s15.sp,
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    width: AppSize.s300.sp,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          user.fullName,
-                          style: getRegularStyle(color: ColorManager.dark),
-                        ),
-                        Row(
-                          children: [
-                            Icon(
-                              Icons.language_sharp,
-                              size: AppSize.s18.sp,
-                            ),
-                            Text(
-                              user.firstLanguage,
-                              style: getMeduimStyle(color: ColorManager.dark),
-                            ),
-                          ],
-                        )
-                      ],
+            SizedBox(
+              width: AppSize.s15.sp,
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      width: AppSize.s300.sp,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            user.fullName,
+                            style: getRegularStyle(color: ColorManager.dark),
+                          ),
+                          Row(
+                            children: [
+                              Icon(
+                                Icons.language_sharp,
+                                size: AppSize.s18.sp,
+                              ),
+                              Text(
+                                user.firstLanguage,
+                                style: getMeduimStyle(color: ColorManager.dark),
+                              ),
+                            ],
+                          )
+                        ],
+                      ),
                     ),
-                  ),
-                  SizedBox(
-                    height: AppSize.s5.sp,
-                  ),
-                  Text(
-                    'Last message ....',
-                    style: getMeduimStyle(color: ColorManager.darkGrey.withOpacity(0.8)),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: AppSize.s15.sp,
-              ),
-              Container(
-                height: AppSize.s1.sp,
-                width: AppSize.s310.sp,
-                color: ColorManager.grey.withOpacity(0.8),
-              ),
-            ],
-          )
-        ],
+                    SizedBox(
+                      height: AppSize.s5.sp,
+                    ),
+                    Text(
+                      'Last message ....',
+                      style: getMeduimStyle(color: ColorManager.darkGrey.withOpacity(0.8)),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: AppSize.s15.sp,
+                ),
+                Container(
+                  height: AppSize.s1.sp,
+                  width: AppSize.s310.sp,
+                  color: ColorManager.grey.withOpacity(0.8),
+                ),
+              ],
+            )
+          ],
+        ),
       ),
     );
   }

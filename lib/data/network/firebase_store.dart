@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:chat_translator/core/utlis/constances.dart';
 import 'package:chat_translator/data/models/models.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -9,6 +11,7 @@ abstract class FirebaseStore {
   Future<void> sentMessageToUserFirebase(MessageModel message);
   Future<void> sentTranslatedMsgToFriendFirebase(MessageModel translatedMsg);
   Future<List<MessageModel>> getMessagesByFriendId(String myFriendId, String myId);
+  Stream<List<MessageModel>> getStreamMessages(String myFriendId, String myId);
 }
 
 class FirebaseStoreImpl implements FirebaseStore {
@@ -124,5 +127,49 @@ class FirebaseStoreImpl implements FirebaseStore {
       print("error getMessagesByFriendId");
       rethrow;
     }
+  }
+
+  // @override
+  // Stream<List<MessageModel>> getStreamMessagdes(String myFriendId, String myId) {
+  //   List<MessageModel> messages = [];
+  //   _firebaseFirestore
+  //       .collection(FirebaseConstance.users)
+  //       .doc(myId)
+  //       .collection(FirebaseConstance.chats)
+  //       .doc(myFriendId)
+  //       .collection(FirebaseConstance.messages)
+  //       .orderBy('dateTime')
+  //       .snapshots()
+  //       .listen((event) {
+  //     messages = [];
+  //     for (var element in event.docs) {
+  //       messages.add(MessageModel.fromJson(element.data()));
+  //     }
+  //   });
+  // }
+
+  @override
+  Stream<List<MessageModel>> getStreamMessages(String myFriendId, String myId) {
+    StreamController<List<MessageModel>> streamController = StreamController<List<MessageModel>>();
+
+    FirebaseFirestore.instance
+        .collection(FirebaseConstance.users)
+        .doc(myId)
+        .collection(FirebaseConstance.chats)
+        .doc(myFriendId)
+        .collection(FirebaseConstance.messages)
+        .orderBy(FirebaseConstance.dataTime)
+        .snapshots()
+        .listen((event) {
+      List<MessageModel> messagesList = [];
+
+      for (var element in event.docs) {
+        messagesList.add(MessageModel.fromJson(element.data()));
+      }
+
+      streamController.add(messagesList);
+    });
+
+    return streamController.stream;
   }
 }

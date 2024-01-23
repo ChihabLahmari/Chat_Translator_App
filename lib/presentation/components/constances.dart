@@ -28,4 +28,11 @@ class PresentationConstances {
       return true;
     }
   }
+
+  static String getImage(String imageNum) {
+    if (imageNum == '0') return 'assets/images/boySticker.png';
+    if (imageNum == '1') return 'assets/images/girlSticker.png';
+    if (imageNum == '2') return 'assets/images/belliSticker.png';
+    return 'assets/images/boySticker.png';
+  }
 }

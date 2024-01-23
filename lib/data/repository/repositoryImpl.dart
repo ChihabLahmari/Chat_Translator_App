@@ -150,4 +150,20 @@ class RepositoryImpl implements Repository {
       return left(Failure('No internet connection'));
     }
   }
+
+  @override
+  Stream<List<Message>> getStreamMessages(String myFriendId, String myId) {
+    return _remoteDataSource.getStreamMessages(myFriendId, myId);
+
+    //   if (await _networkInfo.isConnected()) {
+    //     try {
+    //       return right(_remoteDataSource.getStreamMessages(myFriendId, myId));
+    //     } on FirebaseException catch (excpetion) {
+    //       print(excpetion.message);
+    //       return left(Failure(excpetion.message.toString()));
+    //     }
+    //   } else {
+    //     return left(Failure('No internet connection'));
+    //   }
+  }
 }
