@@ -65,4 +65,19 @@ class MainCubit extends Cubit<MainStates> {
   Stream<Message> getLastMessage(String myFriendId, String myId) {
     return _getLastMessageUsecase.execute(myFriendId, myId);
   }
+
+  String extractTime(String inputString) {
+    try {
+      // Parse the string into a DateTime object
+      DateTime dateTime = DateTime.parse(inputString);
+
+      // Format the DateTime to get the time part only
+      String formattedMinute = dateTime.minute.toString().padLeft(2, '0');
+      return "${dateTime.hour}:$formattedMinute";
+    } catch (e) {
+      // Handle parsing errors or invalid input strings
+      print("Error parsing the input string: $e");
+      return '';
+    }
+  }
 }

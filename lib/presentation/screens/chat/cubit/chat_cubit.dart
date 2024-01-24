@@ -208,10 +208,12 @@ class ChatCubit extends Cubit<ChatStates> {
       // Check if the date is today
       if (dateTime.year == currentDate.year && dateTime.month == currentDate.month && dateTime.day == currentDate.day) {
         // Format the DateTime to get the time part only
-        return "${dateTime.hour}:${dateTime.minute}";
+        String formattedMinute = dateTime.minute.toString().padLeft(2, '0');
+        return "${dateTime.hour}:$formattedMinute";
       } else {
         // Format the DateTime to include the date and time
-        return "${dateTime.year}-${dateTime.month}-${dateTime.day}  ${dateTime.hour}:${dateTime.minute}";
+        String formattedMinute = dateTime.minute.toString().padLeft(2, '0');
+        return "${dateTime.year}-${dateTime.month}-${dateTime.day}  ${dateTime.hour}:$formattedMinute";
       }
     } catch (e) {
       // Handle parsing errors or invalid input strings

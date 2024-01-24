@@ -37,6 +37,18 @@ class _MainViewState extends State<MainView> with TickerProviderStateMixin {
           appBar: AppBar(
             centerTitle: false,
             title: Text(AppStrings.appName),
+            actions: [
+              IconButton(
+                onPressed: () {},
+                icon: const Icon(Icons.search_outlined),
+                color: ColorManager.dark,
+              ),
+              IconButton(
+                onPressed: () {},
+                icon: const Icon(Icons.more_vert_outlined),
+                color: ColorManager.dark,
+              ),
+            ],
           ),
           body: (state is MainGetAllUsersLoadingState)
               ? loadingScreen()
@@ -269,12 +281,29 @@ class UserListtile extends StatelessWidget {
                               children: [
                                 // Text()
                                 SizedBox(
-                                  width: AppSize.s250.sp,
-                                  child: Text(
-                                    lastMessage.text == '' ? 'No messages' : lastMessage.text,
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: getMeduimStyle(color: ColorManager.darkGrey.withOpacity(0.8)),
+                                  width: AppSize.s300.sp,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Flexible(
+                                        flex: 4,
+                                        child: Text(
+                                          lastMessage.text == '' ? 'No messages' : lastMessage.text,
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: getMeduimStyle(color: ColorManager.darkGrey.withOpacity(0.8)),
+                                        ),
+                                      ),
+                                      Flexible(
+                                        flex: 1,
+                                        child: Text(
+                                          lastMessage.dateTime == '' ? "" : cubit.extractTime(lastMessage.dateTime),
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: getMeduimStyle(color: ColorManager.dark),
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
                               ],
