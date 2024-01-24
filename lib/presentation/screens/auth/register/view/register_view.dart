@@ -3,9 +3,9 @@ import 'package:chat_translator/presentation/components/color_manager.dart';
 import 'package:chat_translator/presentation/components/strings_manager.dart';
 import 'package:chat_translator/presentation/components/styles_manager.dart';
 import 'package:chat_translator/presentation/components/widgets.dart';
-import 'package:chat_translator/presentation/screens/main/view/main_view.dart';
-import 'package:chat_translator/presentation/screens/auth/register/cubit/register_states.dart';
 import 'package:chat_translator/presentation/screens/auth/register/cubit/register_cubit.dart';
+import 'package:chat_translator/presentation/screens/auth/register/cubit/register_states.dart';
+import 'package:chat_translator/presentation/screens/main/view/main_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -211,7 +211,7 @@ class RegisterView extends StatelessWidget {
                               color: ColorManager.orange,
                             )
                           : customElevatodButton(
-                              AppStrings.signin.toUpperCase(),
+                              AppStrings.signup.toUpperCase(),
                               (cubit.emailValid && cubit.passwordValid && cubit.nameValid)
                                   ? () {
                                       cubit.registerWithEmailAndPassword();

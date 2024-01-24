@@ -5,8 +5,8 @@ import 'package:chat_translator/presentation/components/styles_manager.dart';
 import 'package:chat_translator/presentation/components/widgets.dart';
 import 'package:chat_translator/presentation/screens/auth/login/cubit/login_cubit.dart';
 import 'package:chat_translator/presentation/screens/auth/login/cubit/login_state.dart';
-import 'package:chat_translator/presentation/screens/main/view/main_view.dart';
 import 'package:chat_translator/presentation/screens/auth/register/view/register_view.dart';
+import 'package:chat_translator/presentation/screens/main/view/main_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -113,7 +113,7 @@ class LoginView extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            AppStrings.alreadyHaveAnAcounte,
+                            AppStrings.dontHaveAnAcounte,
                             style: getMeduimStyle(color: ColorManager.dark),
                           ),
                           TextButton(

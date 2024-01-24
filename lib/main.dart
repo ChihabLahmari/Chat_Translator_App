@@ -4,6 +4,7 @@ import 'package:chat_translator/presentation/components/theme_manager.dart';
 import 'package:chat_translator/presentation/screens/auth/login/view/login_view.dart';
 import 'package:chat_translator/presentation/screens/main/cubit/main_cubit.dart';
 import 'package:chat_translator/presentation/screens/main/view/main_view.dart';
+import 'package:chat_translator/presentation/screens/onBoarding/view/onBoarding_view.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -26,6 +27,7 @@ class MainApp extends StatelessWidget {
 
     // appPrefernces.removeUserId();
     // appPrefernces.removeUserLoggedIn();
+    // appPrefernces.removeUserWatchOnBoarding();
 
     bool isUserLoggedIn = appPrefernces.isUserLoggedIn();
     return MultiBlocProvider(
@@ -41,7 +43,12 @@ class MainApp extends StatelessWidget {
           return MaterialApp(
             debugShowCheckedModeBanner: false,
             theme: getApplicationTheme(),
-            home: isUserLoggedIn ? const MainView() : const LoginView(),
+            home: isUserLoggedIn
+                ? const MainView()
+                : appPrefernces.isUserWatchOnBoarding()
+                    ? const LoginView()
+                    : OnBoardingView(),
+            // home: OnBoardingView(),
           );
         },
       ),

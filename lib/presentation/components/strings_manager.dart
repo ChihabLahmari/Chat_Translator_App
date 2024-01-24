@@ -4,8 +4,9 @@ class AppStrings {
   static String welcome = "Welcome to AI chat";
   static String emailLabel = "email";
   static String passwordLabel = "password";
-  static String signin = "signin";
+  static String signin = "Signin";
   static const String alreadyHaveAnAcounte = "Already have an acounte ?";
+  static const String dontHaveAnAcounte = "Don't have an acounte ?";
 
   // signup
   static String signup = "Signup";
@@ -14,9 +15,15 @@ class AppStrings {
   static String firstLanguage = "first language";
 
   // main
-  static String appName = 'Chat AI';
+  static String appName = 'Translatalk';
 
   // chat
   static String typing = 'typing...';
   static String typeAMessage = 'Type a message';
+
+  // onBoarding screen
+  static String onBoradingMessage = 'Welcome to Translatalk';
+  static String onBoradingLetGetStarted = "Let's Get Started";
+  static String onBoradingDescription =
+      'Welcome to Translatalk, a revolutionary chat app powered by AI that breaks down language barriers and brings people closer together. Communicate effortlessly with friends around the world, as our AI seamlessly translates conversations, fostering global connections regardless of the languages you speak';
 }
