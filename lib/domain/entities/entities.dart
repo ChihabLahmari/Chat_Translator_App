@@ -4,6 +4,7 @@ class Customer {
   String id;
   String email;
   String firstLanguage;
+  bool isUserOnline;
 
   Customer(
     this.fullName,
@@ -11,6 +12,7 @@ class Customer {
     this.id,
     this.email,
     this.firstLanguage,
+    this.isUserOnline,
   );
 }
 

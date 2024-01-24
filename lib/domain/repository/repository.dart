@@ -16,4 +16,6 @@ abstract class Repository {
   Stream<Message> getLastMessage(String myFriendId, String myId);
   Future<Either<Failure, void>> updateTypingStatus(String myFriendId, String myId, bool typingStatus);
   Stream<bool> getTypingStatus(String myFriendId, String myId);
+  Stream<bool> getIsUserOnline(String myFriendId);
+  Future<Either<Failure, void>> updateUserOnlineStatus(String userId, bool status);
 }

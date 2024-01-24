@@ -221,13 +221,42 @@ class UserListtile extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            CircleAvatar(
-              backgroundColor: user.image == '1' ? ColorManager.purple : ColorManager.blue,
-              minRadius: AppSize.s35.sp,
-              maxRadius: AppSize.s35.sp,
-              child: Center(
-                child: Image(image: AssetImage(PresentationConstances.getImage(user.image))),
-              ),
+            Stack(
+              alignment: Alignment.bottomRight,
+              children: [
+                CircleAvatar(
+                  backgroundColor: user.image == '1' ? ColorManager.purple : ColorManager.blue,
+                  minRadius: AppSize.s35.sp,
+                  maxRadius: AppSize.s35.sp,
+                  child: Center(
+                    child: Image(image: AssetImage(PresentationConstances.getImage(user.image))),
+                  ),
+                ),
+                StreamBuilder(
+                  stream: cubit.getIsUserOnline(user.id),
+                  builder: (context, snapshot) {
+                    return snapshot.data == true
+                        ? Container(
+                            width: 20,
+                            height: 20,
+                            decoration: BoxDecoration(
+                              color: ColorManager.white,
+                              borderRadius: BorderRadius.circular(AppPadding.p12.sp),
+                            ),
+                            child: Padding(
+                              padding: EdgeInsets.all(AppSize.s2.sp),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: ColorManager.green,
+                                  borderRadius: BorderRadius.circular(AppPadding.p12.sp),
+                                ),
+                              ),
+                            ),
+                          )
+                        : const SizedBox();
+                  },
+                ),
+              ],
             ),
             SizedBox(
               width: AppSize.s15.sp,

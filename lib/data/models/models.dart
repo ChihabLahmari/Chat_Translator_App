@@ -1,13 +1,7 @@
 import 'package:chat_translator/domain/entities/entities.dart';
 
 class CustomerModel extends Customer {
-  CustomerModel(
-    super.fullName,
-    super.image,
-    super.id,
-    super.email,
-    super.firstLanguage,
-  );
+  CustomerModel(super.fullName, super.image, super.id, super.email, super.firstLanguage, super.isUserOnline);
 
   factory CustomerModel.fromJson(Map<String, dynamic> json) {
     return CustomerModel(
@@ -16,6 +10,7 @@ class CustomerModel extends Customer {
       json['id'],
       json['email'],
       json['firstLanguage'],
+      json['isUserOnline'],
     );
   }
 
@@ -26,6 +21,7 @@ class CustomerModel extends Customer {
       "id": id,
       "email": email,
       "firstLanguage": firstLanguage,
+      "isUserOnline": isUserOnline,
     };
   }
 }

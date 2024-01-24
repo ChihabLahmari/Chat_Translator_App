@@ -2,7 +2,9 @@ import 'package:chat_translator/core/services/services_locator.dart';
 import 'package:chat_translator/core/services/shared_prefrences.dart';
 import 'package:chat_translator/domain/entities/entities.dart';
 import 'package:chat_translator/domain/usecase/get_all_users_usecase.dart';
+import 'package:chat_translator/domain/usecase/get_is_user_online_usecase.dart';
 import 'package:chat_translator/domain/usecase/get_last_message_usecase.dart';
+import 'package:chat_translator/domain/usecase/update_user_online_status.usecase.dart';
 import 'package:chat_translator/presentation/screens/main/cubit/main_states.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -18,6 +20,10 @@ class MainCubit extends Cubit<MainStates> {
   // final GetUserDataByIdUsecase _getUserDataByIdUsecase = GetUserDataByIdUsecase(getIt());
 
   final AppPrefernces _appPrefernces = AppPrefernces(getIt());
+
+  final GetIsUserOnlineUsecase _getIsUserOnlineUsecase = GetIsUserOnlineUsecase(getIt());
+
+  final UpdateUserOnlineStatus _updateUserOnlineStatus = UpdateUserOnlineStatus(getIt());
 
   List<Customer> users = [];
   String myId = '';
@@ -37,7 +43,7 @@ class MainCubit extends Cubit<MainStates> {
       },
       (data) async {
         users = data;
-        getMyId().then((value) => getMyUser());
+        getMyId().then((value) => getMyUser()).then((value) => updateUserOnlineStatus(myId, true));
         emit(MainGetAllUsersSuccessState());
       },
     );
@@ -79,5 +85,19 @@ class MainCubit extends Cubit<MainStates> {
       print("Error parsing the input string: $e");
       return '';
     }
+  }
+
+  Stream<bool> getIsUserOnline(String friendId) {
+    return _getIsUserOnlineUsecase.execute(friendId);
+  }
+
+  Future<void> updateUserOnlineStatus(String userId, bool status) async {
+    (await _updateUserOnlineStatus.execute(userId, status)).fold(
+      (failure) {
+        print('error update user online status');
+        emit(MainUpdateUserOnlineStatusError(failure.message));
+      },
+      (data) {},
+    );
   }
 }

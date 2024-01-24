@@ -15,6 +15,8 @@ abstract class FirebaseStore {
   Stream<MessageModel> getLastMessage(String myFriendId, String myId);
   Future<void> updateTypingStatus(String myFriendId, String myId, bool typingStatus);
   Stream<bool> getTypingStatus(String myFriendId, String myId);
+  Stream<bool> getIsUserOnline(String myFriendId);
+  Future<void> updateUserOnlineStatus(String userId, bool status);
 }
 
 class FirebaseStoreImpl implements FirebaseStore {
@@ -243,5 +245,24 @@ class FirebaseStoreImpl implements FirebaseStore {
         return false;
       }
     });
+  }
+
+  @override
+  Stream<bool> getIsUserOnline(String userId) {
+    return _firebaseFirestore.collection(FirebaseConstance.users).doc(userId).snapshots().map((docSnapshot) {
+      if (docSnapshot.exists) {
+        var userData = docSnapshot.data();
+        return userData?['isUserOnline'] ?? false;
+      } else {
+        return false;
+      }
+    });
+  }
+
+  @override
+  Future<void> updateUserOnlineStatus(String userId, bool status) async {
+    await _firebaseFirestore.collection(FirebaseConstance.users).doc(userId).update(
+      {'isUserOnline': status},
+    );
   }
 }

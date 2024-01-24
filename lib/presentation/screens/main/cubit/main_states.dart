@@ -25,3 +25,9 @@ class MainGetUserDataErrorState extends MainStates {
 class MainGetUserIdState extends MainStates {}
 
 class MainGetMyUserState extends MainStates {}
+
+class MainUpdateUserOnlineStatusError extends MainStates {
+  final String error;
+
+  MainUpdateUserOnlineStatusError(this.error);
+}

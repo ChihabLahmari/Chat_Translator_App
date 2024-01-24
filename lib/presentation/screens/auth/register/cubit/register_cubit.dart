@@ -63,8 +63,8 @@ class RegisterCubit extends Cubit<RegisterStates> {
         emit(RegisterErrorState(failure.message));
       },
       (data1) async {
-        (await _addNewUserToFiresbaseUsecase
-                .execute(Customer(nameController.text, sliding.toString(), data1, emailController.text, firstLanguage)))
+        (await _addNewUserToFiresbaseUsecase.execute(
+                Customer(nameController.text, sliding.toString(), data1, emailController.text, firstLanguage, false)))
             .fold(
           (failure) {
             emit(RegisterAddNewUserErrorState(failure.message));

@@ -17,8 +17,8 @@ class RepositoryImpl implements Repository {
   Future<Either<Failure, String>> addNewUserToFiresbase(Customer customer) async {
     if (await _networkInfo.isConnected()) {
       try {
-        final result = await _remoteDataSource.addNewUserToFiresbase(
-            CustomerModel(customer.fullName, customer.image, customer.id, customer.email, customer.firstLanguage));
+        final result = await _remoteDataSource.addNewUserToFiresbase(CustomerModel(customer.fullName, customer.image,
+            customer.id, customer.email, customer.firstLanguage, customer.isUserOnline));
         return right(result);
       } on FirebaseException catch (excpetion) {
         print(excpetion.message);
@@ -190,5 +190,25 @@ class RepositoryImpl implements Repository {
   @override
   Stream<bool> getTypingStatus(String myFriendId, String myId) {
     return _remoteDataSource.getTypingStatus(myFriendId, myId);
+  }
+
+  @override
+  Stream<bool> getIsUserOnline(String myFriendId) {
+    return _remoteDataSource.getIsUserOnline(myFriendId);
+  }
+
+  @override
+  Future<Either<Failure, void>> updateUserOnlineStatus(String userId, bool status) async {
+    if (await _networkInfo.isConnected()) {
+      try {
+        var x = _remoteDataSource.updateUserOnlineStatus(userId, status);
+        return right(x);
+      } on FirebaseException catch (excpetion) {
+        print(excpetion.message);
+        return left(Failure(excpetion.message.toString()));
+      }
+    } else {
+      return left(Failure('No internet connection'));
+    }
   }
 }

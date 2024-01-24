@@ -22,6 +22,8 @@ abstract class RemoteDataSource {
   Stream<MessageModel> getLastMessage(String myFriendId, String myId);
   Future<void> updateTypingStatus(String myFriendId, String myId, bool typingStatus);
   Stream<bool> getTypingStatus(String myFriendId, String myId);
+  Stream<bool> getIsUserOnline(String myFriendId);
+  Future<void> updateUserOnlineStatus(String userId, bool status);
 }
 
 class RemoteDataSourceImpl implements RemoteDataSource {
@@ -125,5 +127,15 @@ class RemoteDataSourceImpl implements RemoteDataSource {
   @override
   Stream<bool> getTypingStatus(String myFriendId, String myId) {
     return _firebaseStore.getTypingStatus(myFriendId, myId);
+  }
+
+  @override
+  Stream<bool> getIsUserOnline(String myFriendId) {
+    return _firebaseStore.getIsUserOnline(myFriendId);
+  }
+
+  @override
+  Future<void> updateUserOnlineStatus(String userId, bool status) async {
+    return await _firebaseStore.updateUserOnlineStatus(userId, status);
   }
 }
