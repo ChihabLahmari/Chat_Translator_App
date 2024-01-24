@@ -6,7 +6,6 @@ import 'package:chat_translator/core/network/error_message_model.dart';
 import 'package:chat_translator/data/models/models.dart';
 import 'package:chat_translator/data/network/firebase_auth.dart';
 import 'package:chat_translator/data/network/firebase_store.dart';
-import 'package:chat_translator/domain/entities/entities.dart';
 import 'package:http/http.dart';
 
 abstract class RemoteDataSource {
@@ -19,7 +18,10 @@ abstract class RemoteDataSource {
   Future<void> sentMessageToUserFirebase(MessageModel message);
   Future<List<MessageModel>> getMessagesByFriendId(String myFriendId, String myId);
   Future<void> sentTranslatedMsgToFriendFirebase(MessageModel translatedMsg);
-  Stream<List<Message>> getStreamMessages(String myFriendId, String myId);
+  Stream<List<MessageModel>> getStreamMessages(String myFriendId, String myId);
+  Stream<MessageModel> getLastMessage(String myFriendId, String myId);
+  Future<void> updateTypingStatus(String myFriendId, String myId, bool typingStatus);
+  Stream<bool> getTypingStatus(String myFriendId, String myId);
 }
 
 class RemoteDataSourceImpl implements RemoteDataSource {
@@ -106,7 +108,22 @@ class RemoteDataSourceImpl implements RemoteDataSource {
   }
 
   @override
-  Stream<List<Message>> getStreamMessages(String myFriendId, String myId) {
+  Stream<List<MessageModel>> getStreamMessages(String myFriendId, String myId) {
     return _firebaseStore.getStreamMessages(myFriendId, myId);
+  }
+
+  @override
+  Stream<MessageModel> getLastMessage(String myFriendId, String myId) {
+    return _firebaseStore.getLastMessage(myFriendId, myId);
+  }
+
+  @override
+  Future<void> updateTypingStatus(String myFriendId, String myId, bool typingStatus) async {
+    return await _firebaseStore.updateTypingStatus(myFriendId, myId, typingStatus);
+  }
+
+  @override
+  Stream<bool> getTypingStatus(String myFriendId, String myId) {
+    return _firebaseStore.getTypingStatus(myFriendId, myId);
   }
 }

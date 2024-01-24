@@ -241,6 +241,7 @@ class UserListtile extends StatelessWidget {
                                 Icons.language_sharp,
                                 size: AppSize.s18.sp,
                               ),
+                              SizedBox(width: AppPadding.p4.sp),
                               Text(
                                 user.firstLanguage,
                                 style: getMeduimStyle(color: ColorManager.dark),
@@ -253,10 +254,37 @@ class UserListtile extends StatelessWidget {
                     SizedBox(
                       height: AppSize.s5.sp,
                     ),
-                    Text(
-                      'Last message ....',
-                      style: getMeduimStyle(color: ColorManager.darkGrey.withOpacity(0.8)),
-                    ),
+                    StreamBuilder<Message>(
+                      stream: cubit.getLastMessage(user.id, cubit.myId),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState == ConnectionState.waiting) {
+                          return const CircularProgressIndicator(); // Show a loading indicator while waiting for data
+                        } else if (snapshot.hasError) {
+                          errorToast('Error: ${snapshot.error}').show(context);
+                          return Text('Error: ${snapshot.error}');
+                        } else {
+                          Message? lastMessage = snapshot.data;
+                          if (lastMessage != null) {
+                            return Row(
+                              children: [
+                                // Text()
+                                SizedBox(
+                                  width: AppSize.s250.sp,
+                                  child: Text(
+                                    lastMessage.text == '' ? 'No messages' : lastMessage.text,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: getMeduimStyle(color: ColorManager.darkGrey.withOpacity(0.8)),
+                                  ),
+                                ),
+                              ],
+                            );
+                          } else {
+                            return const Text('Last message not available');
+                          }
+                        }
+                      },
+                    )
                   ],
                 ),
                 SizedBox(

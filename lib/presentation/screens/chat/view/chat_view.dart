@@ -1,5 +1,6 @@
 import 'package:chat_translator/domain/entities/entities.dart';
 import 'package:chat_translator/presentation/components/appsize.dart';
+import 'package:chat_translator/presentation/components/assets_manager.dart';
 import 'package:chat_translator/presentation/components/color_manager.dart';
 import 'package:chat_translator/presentation/components/constances.dart';
 import 'package:chat_translator/presentation/components/strings_manager.dart';
@@ -9,19 +10,40 @@ import 'package:chat_translator/presentation/screens/chat/cubit/chat_cubit.dart'
 import 'package:chat_translator/presentation/screens/chat/cubit/chat_states.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:lottie/lottie.dart';
 
 class ChatView extends StatefulWidget {
-  ChatView({super.key, required this.friendData, required this.myData});
+  const ChatView({super.key, required this.friendData, required this.myData});
 
-  Customer friendData;
-  Customer myData;
+  final Customer friendData;
+  final Customer myData;
 
   @override
   State<ChatView> createState() => _ChatViewState();
 }
 
 class _ChatViewState extends State<ChatView> {
+  // late StreamSubscription<bool> subscription;
+
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   var keyboardVisibilityController = KeyboardVisibilityController();
+  //   subscription = keyboardVisibilityController.onChange.listen((bool visible) {
+  //     print('Keyboard visibility update. Is visible: $visible');
+  //     ChatCubit().updateTypingStatus(widget.friendData.id, widget.myData.id, visible);
+  //   });
+  // }
+
+  // @override
+  // void dispose() {
+  //   subscription.cancel();
+  //   FocusScope.of(context).unfocus();
+  //   super.dispose();
+  // }
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -119,30 +141,72 @@ class StreamChatBuilder extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.only(bottom: AppPadding.p120.sp),
-      child: StreamBuilder<List<Message>>(
-        stream: cubit.getMessagesStream(reciverId: widget.friendData.id, myId: widget.myData.id),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return loadingScreen();
-          } else if (snapshot.hasError) {
-            errorToast('Error: ${snapshot.error}').show(context);
-            return Text('Error: ${snapshot.error}');
-          } else {
-            List<Message> messagesList = snapshot.data ?? [];
-            return ListView.builder(
-              reverse: true,
-              // controller: cubit.scrollController,
-              itemCount: messagesList.length,
-              itemBuilder: (context, index) {
-                var message = messagesList.reversed.toList()[index];
-                return message.senderId == widget.myData.id
-                    ? MyMessageContainer(message: message, cubit: cubit)
-                    : FriendMessageContainer(message: message, cubit: cubit);
+      child: Column(
+        children: [
+          Expanded(
+            child: StreamBuilder<List<Message>>(
+              stream: cubit.getMessagesStream(reciverId: widget.friendData.id, myId: widget.myData.id),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  List<Message> messagesList = snapshot.data ?? [];
+                  if (messagesList == []) {
+                    return loadingScreen();
+                  } else {
+                    return ListView.builder(
+                      reverse: true,
+                      // controller: cubit.scrollController,
+                      itemCount: messagesList.length,
+                      itemBuilder: (context, index) {
+                        var message = messagesList.reversed.toList()[index];
+                        return message.senderId == widget.myData.id
+                            ? MyMessageContainer(message: message, cubit: cubit)
+                            : FriendMessageContainer(message: message, cubit: cubit);
+                      },
+                    );
+                  }
+                } else if (snapshot.hasError) {
+                  errorToast('Error: ${snapshot.error}').show(context);
+                  return Text('Error: ${snapshot.error}');
+                } else {
+                  List<Message> messagesList = snapshot.data ?? [];
+                  return ListView.builder(
+                    reverse: true,
+                    // controller: cubit.scrollController,
+                    itemCount: messagesList.length,
+                    itemBuilder: (context, index) {
+                      var message = messagesList.reversed.toList()[index];
+                      return message.senderId == widget.myData.id
+                          ? MyMessageContainer(message: message, cubit: cubit)
+                          : FriendMessageContainer(message: message, cubit: cubit);
+                    },
+                  );
+                }
               },
-            );
-          }
-        },
+            ),
+          ),
+          KeyboardVisibilityBuilder(
+            builder: (p0, isKeyboardVisible) {
+              cubit.updateTypingStatus(widget.friendData.id, widget.myData.id, isKeyboardVisible);
+              return StreamBuilder(
+                stream: cubit.getTypingStatus(widget.friendData.id, widget.myData.id),
+                builder: (context, snapshot) {
+                  if (snapshot.data == true) {
+                    return Container(
+                      width: double.infinity,
+                      alignment: Alignment.bottomLeft,
+                      height: AppSize.s70.sp,
+                      child: Lottie.asset(LottieAsset.typingOrange),
+                    );
+                  } else {
+                    return const SizedBox();
+                  }
+                },
+              );
+            },
+          )
+        ],
       ),
+
       // child: ListView.builder(
       //   reverse: true,
       //   // controller: cubit.scrollController,
@@ -275,7 +339,7 @@ class FriendMessageContainer extends StatelessWidget {
 }
 
 class BottomBar extends StatelessWidget {
-  BottomBar({
+  const BottomBar({
     super.key,
     required this.cubit,
     required this.friendData,
@@ -283,10 +347,10 @@ class BottomBar extends StatelessWidget {
     required this.state,
   });
 
-  ChatCubit cubit;
-  Customer friendData;
-  String myId;
-  ChatStates state;
+  final ChatCubit cubit;
+  final Customer friendData;
+  final String myId;
+  final ChatStates state;
 
   @override
   Widget build(BuildContext context) {
@@ -309,7 +373,11 @@ class BottomBar extends StatelessWidget {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              MessageFormField(cubit: cubit),
+              MessageFormField(
+                cubit: cubit,
+                friendData: friendData.id,
+                myId: myId,
+              ),
               SizedBox(width: AppSize.s10.sp),
               SendButton(
                 cubit: cubit,
@@ -329,9 +397,13 @@ class MessageFormField extends StatelessWidget {
   const MessageFormField({
     super.key,
     required this.cubit,
+    required this.friendData,
+    required this.myId,
   });
 
   final ChatCubit cubit;
+  final String friendData;
+  final String myId;
 
   @override
   Widget build(BuildContext context) {
@@ -366,13 +438,17 @@ class MessageFormField extends StatelessWidget {
             ),
           ),
         ),
+        // onChanged: (value) {
+        //   cubit.updateTypingStatus(friendData, myId, true);
+        // },
+        onTapOutside: (event) => FocusScope.of(context).unfocus(),
       ),
     );
   }
 }
 
 class SendButton extends StatelessWidget {
-  SendButton({
+  const SendButton({
     super.key,
     required this.cubit,
     required this.friendData,
@@ -380,10 +456,10 @@ class SendButton extends StatelessWidget {
     required this.state,
   });
 
-  ChatCubit cubit;
-  Customer friendData;
-  String myId;
-  ChatStates state;
+  final ChatCubit cubit;
+  final Customer friendData;
+  final String myId;
+  final ChatStates state;
 
   @override
   Widget build(BuildContext context) {

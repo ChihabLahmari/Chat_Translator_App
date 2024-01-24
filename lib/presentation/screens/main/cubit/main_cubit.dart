@@ -2,6 +2,7 @@ import 'package:chat_translator/core/services/services_locator.dart';
 import 'package:chat_translator/core/services/shared_prefrences.dart';
 import 'package:chat_translator/domain/entities/entities.dart';
 import 'package:chat_translator/domain/usecase/get_all_users_usecase.dart';
+import 'package:chat_translator/domain/usecase/get_last_message_usecase.dart';
 import 'package:chat_translator/presentation/screens/main/cubit/main_states.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -12,17 +13,19 @@ class MainCubit extends Cubit<MainStates> {
 
   final GetAllusersUsecase _getAllusersUsecase = GetAllusersUsecase(getIt());
 
+  final GetLastMessageUsecase _getLastMessageUsecase = GetLastMessageUsecase(getIt());
+
   // final GetUserDataByIdUsecase _getUserDataByIdUsecase = GetUserDataByIdUsecase(getIt());
 
   final AppPrefernces _appPrefernces = AppPrefernces(getIt());
 
   List<Customer> users = [];
-  String userId = '';
+  String myId = '';
   Customer? user;
 
-  Future<void> getUserId() async {
-    userId = await _appPrefernces.getUserId();
-    print('userId$userId');
+  Future<void> getMyId() async {
+    myId = await _appPrefernces.getUserId();
+    print('userId$myId');
     emit(MainGetUserIdState());
   }
 
@@ -34,15 +37,15 @@ class MainCubit extends Cubit<MainStates> {
       },
       (data) async {
         users = data;
-        getUserId().then((value) => getMyUser());
+        getMyId().then((value) => getMyUser());
         emit(MainGetAllUsersSuccessState());
       },
     );
   }
 
   getMyUser() {
-    user = users.where((customer) => customer.id == userId).first;
-    users.removeWhere((customer) => customer.id == userId);
+    user = users.where((customer) => customer.id == myId).first;
+    users.removeWhere((customer) => customer.id == myId);
     emit(MainGetMyUserState());
   }
 
@@ -58,4 +61,8 @@ class MainCubit extends Cubit<MainStates> {
   //     },
   //   );
   // }
+
+  Stream<Message> getLastMessage(String myFriendId, String myId) {
+    return _getLastMessageUsecase.execute(myFriendId, myId);
+  }
 }

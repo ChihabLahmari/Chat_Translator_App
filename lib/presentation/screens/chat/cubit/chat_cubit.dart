@@ -3,9 +3,11 @@ import 'dart:async';
 import 'package:chat_translator/core/services/services_locator.dart';
 import 'package:chat_translator/domain/entities/entities.dart';
 import 'package:chat_translator/domain/usecase/get_stream_messages_usecase.dart';
+import 'package:chat_translator/domain/usecase/get_typing_status.dart';
 import 'package:chat_translator/domain/usecase/send_message_to_user_firebase_usecase.dart';
 import 'package:chat_translator/domain/usecase/send_translated_msg_toFriend_firebase_usecase.dart';
 import 'package:chat_translator/domain/usecase/translate_message_to_friend_lang_usecase.dart';
+import 'package:chat_translator/domain/usecase/update_status_usecase.dart';
 import 'package:chat_translator/presentation/screens/chat/cubit/chat_states.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -26,9 +28,33 @@ class ChatCubit extends Cubit<ChatStates> {
 
   final GetStreamMessagesUseCase _getStreamMessagesUseCase = GetStreamMessagesUseCase(getIt());
 
+  final GetTypingStatusUsecase _getTypingStatusUsecase = GetTypingStatusUsecase(getIt());
+
+  final UpdatetypingStatusUsecase _updatetypingStatusUsecase = UpdatetypingStatusUsecase(getIt());
+
   String translatedMsg = '';
 
   TextEditingController messageController = TextEditingController();
+
+  Stream<bool> getTypingStatus(String myFriendId, String myId) {
+    return _getTypingStatusUsecase.execute(myFriendId, myId);
+  }
+
+  bool typingStatusBool = false;
+
+  Future<void> updateTypingStatus(String myFriendId, String myId, bool typingStatus) async {
+    if (typingStatus != typingStatusBool) {
+      typingStatusBool = typingStatus;
+      (await _updatetypingStatusUsecase.execute(myFriendId, myId, typingStatus)).fold(
+        (failure) {
+          print('error updateTypingStatus');
+        },
+        (data) {
+          print('success updateTypingStatus');
+        },
+      );
+    } else {}
+  }
 
   // ScrollController scrollController = ScrollController();
 
@@ -159,14 +185,16 @@ class ChatCubit extends Cubit<ChatStates> {
   }
 
   void sendMessage(String friendId, String friendLanguage, String myId) async {
-    emit(ChatSendMessagesLoadingState());
-    await translateMessage(friendLanguage);
+    if (messageController.text.isNotEmpty) {
+      emit(ChatSendMessagesLoadingState());
+      await translateMessage(friendLanguage);
 
-    await sendUntranslatedMessage(friendId, myId);
+      await sendUntranslatedMessage(friendId, myId);
 
-    await sendTranslatedMessage(friendId, myId);
-    messageController.clear();
-    emit(ChatSendMessagesSuccessState());
+      await sendTranslatedMessage(friendId, myId);
+      messageController.clear();
+      emit(ChatSendMessagesSuccessState());
+    } else {}
   }
 
   String? extractTime(String inputString) {
@@ -174,10 +202,17 @@ class ChatCubit extends Cubit<ChatStates> {
       // Parse the string into a DateTime object
       DateTime dateTime = DateTime.parse(inputString);
 
-      // Format the DateTime to get the time part only
-      String time = "${dateTime.hour}:${dateTime.minute}";
+      // Get the current date
+      DateTime currentDate = DateTime.now();
 
-      return time;
+      // Check if the date is today
+      if (dateTime.year == currentDate.year && dateTime.month == currentDate.month && dateTime.day == currentDate.day) {
+        // Format the DateTime to get the time part only
+        return "${dateTime.hour}:${dateTime.minute}";
+      } else {
+        // Format the DateTime to include the date and time
+        return "${dateTime.year}-${dateTime.month}-${dateTime.day}  ${dateTime.hour}:${dateTime.minute}";
+      }
     } catch (e) {
       // Handle parsing errors or invalid input strings
       print("Error parsing the input string: $e");

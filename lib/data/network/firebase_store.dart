@@ -12,6 +12,9 @@ abstract class FirebaseStore {
   Future<void> sentTranslatedMsgToFriendFirebase(MessageModel translatedMsg);
   Future<List<MessageModel>> getMessagesByFriendId(String myFriendId, String myId);
   Stream<List<MessageModel>> getStreamMessages(String myFriendId, String myId);
+  Stream<MessageModel> getLastMessage(String myFriendId, String myId);
+  Future<void> updateTypingStatus(String myFriendId, String myId, bool typingStatus);
+  Stream<bool> getTypingStatus(String myFriendId, String myId);
 }
 
 class FirebaseStoreImpl implements FirebaseStore {
@@ -152,7 +155,7 @@ class FirebaseStoreImpl implements FirebaseStore {
   Stream<List<MessageModel>> getStreamMessages(String myFriendId, String myId) {
     StreamController<List<MessageModel>> streamController = StreamController<List<MessageModel>>();
 
-    FirebaseFirestore.instance
+    _firebaseFirestore
         .collection(FirebaseConstance.users)
         .doc(myId)
         .collection(FirebaseConstance.chats)
@@ -171,5 +174,74 @@ class FirebaseStoreImpl implements FirebaseStore {
     });
 
     return streamController.stream;
+  }
+
+  @override
+  Stream<MessageModel> getLastMessage(String myFriendId, String myId) {
+    try {
+      return _firebaseFirestore
+          .collection(FirebaseConstance.users)
+          .doc(myId)
+          .collection(FirebaseConstance.chats)
+          .doc(myFriendId)
+          .collection(FirebaseConstance.messages)
+          .orderBy(FirebaseConstance.dataTime, descending: true)
+          .limit(1)
+          .snapshots()
+          .map(
+        (querySnapshot) {
+          if (querySnapshot.docs.isNotEmpty) {
+            return MessageModel.fromJson(querySnapshot.docs.first.data());
+          } else {
+            return MessageModel('', '', '', '');
+          }
+        },
+      );
+    } catch (e) {
+      print("Error getting last message stream: $e");
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> updateTypingStatus(String myFriendId, String myId, bool typingStatus) async {
+    var chatReference = _firebaseFirestore
+        .collection(FirebaseConstance.users)
+        .doc(myFriendId)
+        .collection(FirebaseConstance.chats)
+        .doc(myId);
+
+    // var chatDocument = await chatReference.get();
+
+    await chatReference.set({
+      'typingStatus': typingStatus,
+    }, SetOptions(merge: true));
+    // if (chatDocument.exists) {
+    //   var chatData = chatDocument.data();
+    //   if (chatData != null) {
+    //     // Update the 'typingStatus' field, whether it's null or not
+    //     await chatReference.set({
+    //       'typingStatus': typingStatus,
+    //     }, SetOptions(merge: true));
+    //   }
+    // }
+  }
+
+  @override
+  Stream<bool> getTypingStatus(String myFriendId, String myId) {
+    return _firebaseFirestore
+        .collection(FirebaseConstance.users)
+        .doc(myId)
+        .collection(FirebaseConstance.chats)
+        .doc(myFriendId)
+        .snapshots()
+        .map((docSnapshot) {
+      if (docSnapshot.exists) {
+        var chatData = docSnapshot.data();
+        return chatData?['typingStatus'] ?? false;
+      } else {
+        return false;
+      }
+    });
   }
 }

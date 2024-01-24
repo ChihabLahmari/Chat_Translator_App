@@ -166,4 +166,29 @@ class RepositoryImpl implements Repository {
     //     return left(Failure('No internet connection'));
     //   }
   }
+
+  @override
+  Stream<Message> getLastMessage(String myFriendId, String myId) {
+    return _remoteDataSource.getLastMessage(myFriendId, myId);
+  }
+
+  @override
+  Future<Either<Failure, void>> updateTypingStatus(String myFriendId, String myId, bool typingStatus) async {
+    if (await _networkInfo.isConnected()) {
+      try {
+        var x = await _remoteDataSource.updateTypingStatus(myFriendId, myId, typingStatus);
+        return right(x);
+      } on FirebaseException catch (excpetion) {
+        print(excpetion.message);
+        return left(Failure(excpetion.message.toString()));
+      }
+    } else {
+      return left(Failure('No internet connection'));
+    }
+  }
+
+  @override
+  Stream<bool> getTypingStatus(String myFriendId, String myId) {
+    return _remoteDataSource.getTypingStatus(myFriendId, myId);
+  }
 }

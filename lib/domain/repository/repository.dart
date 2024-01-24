@@ -13,4 +13,7 @@ abstract class Repository {
   Future<Either<Failure, void>> sentMessageToUserFirebase(Message message);
   Future<Either<Failure, void>> sentTranslatedMsgToFriendFirebase(Message translatedMsg);
   Stream<List<Message>> getStreamMessages(String myFriendId, String myId);
+  Stream<Message> getLastMessage(String myFriendId, String myId);
+  Future<Either<Failure, void>> updateTypingStatus(String myFriendId, String myId, bool typingStatus);
+  Stream<bool> getTypingStatus(String myFriendId, String myId);
 }
