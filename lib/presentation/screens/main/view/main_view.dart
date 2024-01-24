@@ -195,7 +195,7 @@ class UserListtile extends StatelessWidget {
               alignment: Alignment.bottomRight,
               children: [
                 CircleAvatar(
-                  backgroundColor: user.image == '1' ? ColorManager.purple : ColorManager.blue,
+                  backgroundColor: PresentationConstances.getImageColor(user.image),
                   minRadius: AppSize.s35.sp,
                   maxRadius: AppSize.s35.sp,
                   child: Center(

@@ -26,5 +26,8 @@ class ColorManager {
   static Color blue = const Color(0xffBFE0F0);
   static Color purple = const Color(0xffD3CCF0);
   static Color green = const Color(0xff25D366);
+  static Color greenLight = const Color(0xffB6E6BF);
+  static Color rose = const Color(0xffF1C3CE);
+  static Color yellow = const Color(0xffF1DFAB);
   static Color dark = const Color.fromARGB(255, 24, 24, 24);
 }

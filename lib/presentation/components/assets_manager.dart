@@ -4,7 +4,11 @@ const String lottiePath = "assets/lottie";
 class ImageAsset {
   static const String belliSticker = "$imagePath/belliSticker.png";
   static const String boySticker = "$imagePath/boySticker.png";
+  static const String boy2Sticker = "$imagePath/boy2Sticker.png";
+  static const String boy3Sticker = "$imagePath/boy3Sticker.png";
   static const String girlSticker = "$imagePath/girlSticker.png";
+  static const String girl2Sticker = "$imagePath/girl2Sticker.png";
+  static const String girl3Sticker = "$imagePath/girl3Sticker.png";
   static const String message = "$imagePath/message.png";
 }
 

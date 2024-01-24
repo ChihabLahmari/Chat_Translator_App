@@ -70,8 +70,12 @@ class RegisterView extends StatelessWidget {
                       CupertinoSlidingSegmentedControl(
                         children: const {
                           0: Image(image: AssetImage('assets/images/boySticker.png')),
-                          1: Image(image: AssetImage('assets/images/girlSticker.png')),
+                          1: Image(image: AssetImage('assets/images/girl2Sticker.png')),
                           2: Image(image: AssetImage('assets/images/belliSticker.png')),
+                          // 3: Image(image: AssetImage('assets/images/boy2Sticker.png')),
+                          // 4: Image(image: AssetImage('assets/images/boy3Sticker.png')),
+                          // 1: Image(image: AssetImage('assets/images/girlSticker.png')),
+                          // 6: Image(image: AssetImage('assets/images/girl3Sticker.png')),
                         },
                         backgroundColor: ColorManager.whiteGrey,
                         thumbColor: ColorManager.white,
