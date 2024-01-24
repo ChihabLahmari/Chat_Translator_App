@@ -63,38 +63,8 @@ class _MainViewState extends State<MainView> with TickerProviderStateMixin {
                         controller: tabController,
                         children: [
                           UserListview(cubit: cubit),
-                          ListView.builder(
-                            itemCount: cubit.users.length,
-                            physics: const BouncingScrollPhysics(),
-                            shrinkWrap: true,
-                            itemBuilder: (context, index) {
-                              return Card(
-                                margin: EdgeInsets.all(AppPadding.p12.sp),
-                                child: const ListTile(
-                                  leading: Icon(Icons.image),
-                                  title: Text('hello'),
-                                  subtitle: Text('calindaflksdjf;al falskd;jfas'),
-                                  trailing: Icon(Icons.golf_course),
-                                ),
-                              );
-                            },
-                          ),
-                          ListView.builder(
-                            itemCount: cubit.users.length,
-                            physics: const BouncingScrollPhysics(),
-                            shrinkWrap: true,
-                            itemBuilder: (context, index) {
-                              return Card(
-                                margin: EdgeInsets.all(AppPadding.p12.sp),
-                                child: const ListTile(
-                                  leading: Icon(Icons.image),
-                                  title: Text('hello'),
-                                  subtitle: Text('calindaflksdjf;al falskd;jfas'),
-                                  trailing: Icon(Icons.golf_course),
-                                ),
-                              );
-                            },
-                          ),
+                          // loadingScreen(),
+                          // loadingScreen(),
                         ],
                       ),
                     ),

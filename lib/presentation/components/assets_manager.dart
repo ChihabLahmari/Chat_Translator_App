@@ -10,5 +10,6 @@ class ImageAsset {
 
 class LottieAsset {
   static const String typingOrange = "$lottiePath/typingOrange.json";
-  static const String loading = "$lottiePath/animation2.json";
+  static const String loading = "$lottiePath/loadingOrange.json";
+  static const String onBoarding = "$lottiePath/onboarding.json";
 }
