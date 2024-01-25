@@ -26,6 +26,8 @@ class MainCubit extends Cubit<MainStates> {
   final UpdateUserOnlineStatus _updateUserOnlineStatus = UpdateUserOnlineStatus(getIt());
 
   List<Customer> users = [];
+  List<Customer> onlineUsers = [];
+
   String myId = '';
   Customer? user;
 
@@ -104,5 +106,15 @@ class MainCubit extends Cubit<MainStates> {
   void logout() {
     _appPrefernces.removeUserId();
     _appPrefernces.removeUserLoggedIn();
+  }
+
+  void addOnlineUser(String id) {
+    // Find the user with the given ID
+    user = users.firstWhere((element) => element.id == id);
+
+    // If the user is found and not already in the onlineUsers list, add it
+    if (user != null && !onlineUsers.contains(user)) {
+      onlineUsers.add(user!);
+    }
   }
 }

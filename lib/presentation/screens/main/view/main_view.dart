@@ -70,7 +70,7 @@ class _MainViewState extends State<MainView> with TickerProviderStateMixin {
                         controller: tabController,
                         children: [
                           UserListview(cubit: cubit),
-                          loadingScreen(),
+                          OnlineUserListview(cubit: cubit),
                           loadingScreen(),
                         ],
                       ),
@@ -241,6 +241,31 @@ class UserListview extends StatelessWidget {
   }
 }
 
+class OnlineUserListview extends StatelessWidget {
+  const OnlineUserListview({
+    super.key,
+    required this.cubit,
+  });
+
+  final MainCubit cubit;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      itemCount: cubit.onlineUsers.length,
+      physics: const BouncingScrollPhysics(),
+      shrinkWrap: true,
+      itemBuilder: (context, index) {
+        var user = cubit.onlineUsers[index];
+        return UserListtile(
+          user: user,
+          cubit: cubit,
+        );
+      },
+    );
+  }
+}
+
 class UserListtile extends StatelessWidget {
   const UserListtile({
     super.key,
@@ -287,25 +312,28 @@ class UserListtile extends StatelessWidget {
                 StreamBuilder(
                   stream: cubit.getIsUserOnline(user.id),
                   builder: (context, snapshot) {
-                    return snapshot.data == true
-                        ? Container(
-                            width: 20,
-                            height: 20,
+                    if (snapshot.data == true) {
+                      cubit.addOnlineUser(user.id);
+                      return Container(
+                        width: 20,
+                        height: 20,
+                        decoration: BoxDecoration(
+                          color: ColorManager.white,
+                          borderRadius: BorderRadius.circular(AppPadding.p12.sp),
+                        ),
+                        child: Padding(
+                          padding: EdgeInsets.all(AppSize.s2.sp),
+                          child: Container(
                             decoration: BoxDecoration(
-                              color: ColorManager.white,
+                              color: ColorManager.green,
                               borderRadius: BorderRadius.circular(AppPadding.p12.sp),
                             ),
-                            child: Padding(
-                              padding: EdgeInsets.all(AppSize.s2.sp),
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  color: ColorManager.green,
-                                  borderRadius: BorderRadius.circular(AppPadding.p12.sp),
-                                ),
-                              ),
-                            ),
-                          )
-                        : const SizedBox();
+                          ),
+                        ),
+                      );
+                    } else {
+                      return const SizedBox();
+                    }
                   },
                 ),
               ],
