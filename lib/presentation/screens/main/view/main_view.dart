@@ -35,8 +35,9 @@ class _MainViewState extends State<MainView> with TickerProviderStateMixin {
         var cubit = MainCubit.get(context);
         return Scaffold(
           backgroundColor: ColorManager.white,
-          drawer: CustomDrawer(cubit: cubit),
+          endDrawer: CustomDrawer(cubit: cubit),
           appBar: AppBar(
+            iconTheme: IconThemeData(color: ColorManager.dark),
             centerTitle: false,
             title: Text(AppStrings.appName),
             actions: [
@@ -45,7 +46,7 @@ class _MainViewState extends State<MainView> with TickerProviderStateMixin {
                 icon: const Icon(Icons.search_outlined),
                 color: ColorManager.dark,
               ),
-              const DrawerButton(),
+              const EndDrawerButton(),
 
               // IconButton(
               //   onPressed: () {
@@ -116,7 +117,7 @@ class CustomDrawer extends StatelessWidget {
               showDialog(
                 context: context,
                 builder: (context) {
-                  return removeTasksDialog(context, cubit);
+                  return logoutDialog(context, cubit);
                 },
               );
             },
@@ -413,7 +414,7 @@ class UserListtile extends StatelessWidget {
   }
 }
 
-Widget removeTasksDialog(BuildContext context, MainCubit cubit) {
+Widget logoutDialog(BuildContext context, MainCubit cubit) {
   return AlertDialog(
     backgroundColor: ColorManager.white,
     shadowColor: ColorManager.orange.withOpacity(0.5),

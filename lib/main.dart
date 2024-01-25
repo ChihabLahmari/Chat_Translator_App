@@ -43,6 +43,7 @@ class MainApp extends StatelessWidget {
           return MaterialApp(
             debugShowCheckedModeBanner: false,
             theme: getApplicationTheme(),
+            // darkTheme: getApplicationDarkTheme(),
             home: isUserLoggedIn
                 ? const MainView()
                 : appPrefernces.isUserWatchOnBoarding()

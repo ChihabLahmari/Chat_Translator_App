@@ -10,6 +10,7 @@ ThemeData getApplicationTheme() {
   return ThemeData(
     useMaterial3: true,
     primaryColor: ColorManager.whiteGrey,
+    scaffoldBackgroundColor: ColorManager.white,
 
     // ICON :
     iconTheme: IconThemeData(
