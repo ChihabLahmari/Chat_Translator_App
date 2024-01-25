@@ -6,6 +6,7 @@ import 'package:chat_translator/presentation/components/font_manager.dart';
 import 'package:chat_translator/presentation/components/strings_manager.dart';
 import 'package:chat_translator/presentation/components/styles_manager.dart';
 import 'package:chat_translator/presentation/components/widgets.dart';
+import 'package:chat_translator/presentation/screens/auth/login/view/login_view.dart';
 import 'package:chat_translator/presentation/screens/chat/view/chat_view.dart';
 import 'package:chat_translator/presentation/screens/main/cubit/main_cubit.dart';
 import 'package:chat_translator/presentation/screens/main/cubit/main_states.dart';
@@ -34,6 +35,7 @@ class _MainViewState extends State<MainView> with TickerProviderStateMixin {
         var cubit = MainCubit.get(context);
         return Scaffold(
           backgroundColor: ColorManager.white,
+          drawer: CustomDrawer(cubit: cubit),
           appBar: AppBar(
             centerTitle: false,
             title: Text(AppStrings.appName),
@@ -43,11 +45,15 @@ class _MainViewState extends State<MainView> with TickerProviderStateMixin {
                 icon: const Icon(Icons.search_outlined),
                 color: ColorManager.dark,
               ),
-              IconButton(
-                onPressed: () {},
-                icon: const Icon(Icons.more_vert_outlined),
-                color: ColorManager.dark,
-              ),
+              const DrawerButton(),
+
+              // IconButton(
+              //   onPressed: () {
+              //     const Drawer();
+              //   },
+              //   icon: const Icon(Icons.menu_outlined),
+              //   color: ColorManager.dark,
+              // ),
             ],
           ),
           body: (state is MainGetAllUsersLoadingState)
@@ -63,8 +69,8 @@ class _MainViewState extends State<MainView> with TickerProviderStateMixin {
                         controller: tabController,
                         children: [
                           UserListview(cubit: cubit),
-                          // loadingScreen(),
-                          // loadingScreen(),
+                          loadingScreen(),
+                          loadingScreen(),
                         ],
                       ),
                     ),
@@ -73,6 +79,81 @@ class _MainViewState extends State<MainView> with TickerProviderStateMixin {
         );
       },
     );
+  }
+}
+
+class CustomDrawer extends StatelessWidget {
+  const CustomDrawer({
+    super.key,
+    required this.cubit,
+  });
+
+  final MainCubit cubit;
+
+  @override
+  Widget build(BuildContext context) {
+    return Drawer(
+        child: SafeArea(
+      child: Column(
+        children: [
+          CircleAvatar(
+            backgroundColor: PresentationConstances.getImageColor(cubit.user?.image ?? '1'),
+            minRadius: AppSize.s50.sp,
+            maxRadius: AppSize.s50.sp,
+            child: Center(
+              child: Image(image: AssetImage(PresentationConstances.getImage(cubit.user?.image ?? '1'))),
+            ),
+          ),
+          SizedBox(height: AppSize.s15.sp),
+          Text(
+            cubit.user?.fullName ?? '',
+            style: getlargeStyle(color: ColorManager.dark),
+          ),
+          SizedBox(height: AppSize.s10.sp),
+          ListTile(
+            onTap: () {
+              Navigator.pop(context);
+              showDialog(
+                context: context,
+                builder: (context) {
+                  return removeTasksDialog(context, cubit);
+                },
+              );
+            },
+            leading: Icon(
+              Icons.logout_outlined,
+              color: ColorManager.dark,
+            ),
+            title: Text(
+              AppStrings.logout,
+              style: getMeduimStyle(color: ColorManager.dark),
+            ),
+          ),
+          SizedBox(height: AppSize.s10.sp),
+          ListTile(
+            leading: Icon(
+              Icons.dark_mode_outlined,
+              color: ColorManager.dark,
+            ),
+            title: Text(
+              AppStrings.darkLightMode,
+              style: getMeduimStyle(color: ColorManager.dark),
+            ),
+          ),
+          SizedBox(height: AppSize.s10.sp),
+          ListTile(
+            leading: Icon(
+              Icons.settings,
+              color: ColorManager.dark,
+            ),
+            title: Text(
+              AppStrings.settings,
+              style: getMeduimStyle(color: ColorManager.dark),
+            ),
+          ),
+        ],
+      ),
+    ));
   }
 }
 
@@ -330,4 +411,79 @@ class UserListtile extends StatelessWidget {
       ),
     );
   }
+}
+
+Widget removeTasksDialog(BuildContext context, MainCubit cubit) {
+  return AlertDialog(
+    backgroundColor: ColorManager.white,
+    shadowColor: ColorManager.orange.withOpacity(0.5),
+    content: SizedBox(
+      height: AppSize.s120.sp,
+      // width: double.maxFinite,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            AppStrings.logoutMessage,
+            style: getRegularStyle(color: ColorManager.dark).copyWith(overflow: TextOverflow.visible),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: InkWell(
+                  onTap: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(AppPadding.p12),
+                      color: ColorManager.orange,
+                    ),
+                    child: Center(
+                        child: Padding(
+                      padding: EdgeInsets.all(AppPadding.p10.sp),
+                      child: Text(
+                        AppStrings.cencel,
+                        style: getMeduimStyle(color: ColorManager.white),
+                      ),
+                    )),
+                  ),
+                ),
+              ),
+              const SizedBox(width: AppSize.s20),
+              Expanded(
+                child: InkWell(
+                  onTap: () {
+                    cubit.logout();
+
+                    Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const LoginView(),
+                        ),
+                        (route) => false);
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(AppPadding.p12),
+                      color: ColorManager.orange,
+                    ),
+                    child: Center(
+                        child: Padding(
+                      padding: EdgeInsets.all(AppPadding.p10.sp),
+                      child: Text(
+                        AppStrings.logout,
+                        style: getMeduimStyle(color: ColorManager.white),
+                      ),
+                    )),
+                  ),
+                ),
+              ),
+            ],
+          )
+        ],
+      ),
+    ),
+  );
 }

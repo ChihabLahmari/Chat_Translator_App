@@ -100,4 +100,9 @@ class MainCubit extends Cubit<MainStates> {
       (data) {},
     );
   }
+
+  void logout() {
+    _appPrefernces.removeUserId();
+    _appPrefernces.removeUserLoggedIn();
+  }
 }

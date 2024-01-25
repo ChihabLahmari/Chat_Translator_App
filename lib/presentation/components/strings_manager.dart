@@ -26,4 +26,10 @@ class AppStrings {
   static String onBoradingLetGetStarted = "Let's Get Started";
   static String onBoradingDescription =
       'Welcome to Translatalk, a revolutionary chat app powered by AI that breaks down language barriers and brings people closer together. Communicate effortlessly with friends around the world, as our AI seamlessly translates conversations, fostering global connections regardless of the languages you speak';
+
+  static String logout = 'Logout';
+  static String settings = 'Settings';
+  static String cencel = 'Cencel';
+  static String darkLightMode = 'dark / light mode';
+  static String logoutMessage = "Are you sure you want to Logout ?";
 }
