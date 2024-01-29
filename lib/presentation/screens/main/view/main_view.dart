@@ -59,23 +59,23 @@ class _MainViewState extends State<MainView> with TickerProviderStateMixin {
           ),
           body: (state is MainGetAllUsersLoadingState)
               ? loadingScreen()
-              : Column(
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.all(AppPadding.p10.sp).copyWith(bottom: 2),
-                      child: Card(child: TabBarContainer(tabController: tabController)),
-                    ),
-                    Expanded(
-                      child: TabBarView(
-                        controller: tabController,
-                        children: [
-                          UserListview(cubit: cubit),
-                          OnlineUserListview(cubit: cubit),
-                          loadingScreen(),
-                        ],
+              : Padding(
+                  padding: EdgeInsets.all(AppPadding.p16.sp),
+                  child: Column(
+                    children: [
+                      TabBarContainer(tabController: tabController),
+                      Expanded(
+                        child: TabBarView(
+                          controller: tabController,
+                          children: [
+                            UserListview(cubit: cubit),
+                            OnlineUserListview(cubit: cubit),
+                            loadingScreen(),
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
         );
       },
@@ -175,6 +175,7 @@ class TabBarContainer extends StatelessWidget {
         borderRadius: BorderRadius.circular(AppPadding.p12.sp),
       ),
       child: TabBar(
+        dividerColor: Colors.transparent,
         indicatorSize: TabBarIndicatorSize.tab,
         indicatorPadding: EdgeInsets.all(AppPadding.p6.sp),
         indicator: BoxDecoration(
@@ -182,7 +183,7 @@ class TabBarContainer extends StatelessWidget {
           color: ColorManager.orange,
         ),
         controller: tabController,
-        labelPadding: EdgeInsets.symmetric(horizontal: AppPadding.p30.sp),
+        // labelPadding: EdgeInsets.symmetric(horizontal: AppPadding.p30.sp),
         labelColor: ColorManager.white,
         unselectedLabelColor: ColorManager.orange,
         tabs: const [
@@ -293,10 +294,9 @@ class UserListtile extends StatelessWidget {
       },
       child: Container(
         width: double.infinity,
-        padding: EdgeInsets.all(AppPadding.p8.sp).copyWith(bottom: AppPadding.p12.sp),
+        padding: EdgeInsets.symmetric(vertical: AppPadding.p12.sp),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
+          // mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             Stack(
               alignment: Alignment.bottomRight,
@@ -341,15 +341,13 @@ class UserListtile extends StatelessWidget {
             SizedBox(
               width: AppSize.s15.sp,
             ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(
-                      width: AppSize.s300.sp,
-                      child: Row(
+            Expanded(
+              child: Column(
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
@@ -371,69 +369,61 @@ class UserListtile extends StatelessWidget {
                           )
                         ],
                       ),
-                    ),
-                    SizedBox(
-                      height: AppSize.s5.sp,
-                    ),
-                    StreamBuilder<Message>(
-                      stream: cubit.getLastMessage(user.id, cubit.myId),
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState == ConnectionState.waiting) {
-                          return const CircularProgressIndicator(); // Show a loading indicator while waiting for data
-                        } else if (snapshot.hasError) {
-                          errorToast('Error: ${snapshot.error}').show(context);
-                          return Text('Error: ${snapshot.error}');
-                        } else {
-                          Message? lastMessage = snapshot.data;
-                          if (lastMessage != null) {
-                            return Row(
-                              children: [
-                                // Text()
-                                SizedBox(
-                                  width: AppSize.s300.sp,
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Flexible(
-                                        flex: 4,
-                                        child: Text(
-                                          lastMessage.text == '' ? 'No messages' : lastMessage.text,
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: getMeduimStyle(color: ColorManager.darkGrey.withOpacity(0.8)),
-                                        ),
-                                      ),
-                                      Flexible(
-                                        flex: 1,
-                                        child: Text(
-                                          lastMessage.dateTime == '' ? "" : cubit.extractTime(lastMessage.dateTime),
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: getMeduimStyle(color: ColorManager.dark),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            );
+                      SizedBox(
+                        height: AppSize.s5.sp,
+                      ),
+                      StreamBuilder<Message>(
+                        stream: cubit.getLastMessage(user.id, cubit.myId),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState == ConnectionState.waiting) {
+                            return const CircularProgressIndicator(); // Show a loading indicator while waiting for data
+                          } else if (snapshot.hasError) {
+                            errorToast('Error: ${snapshot.error}').show(context);
+                            return Text('Error: ${snapshot.error}');
                           } else {
-                            return const Text('Last message not available');
+                            Message? lastMessage = snapshot.data;
+                            if (lastMessage != null) {
+                              return Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Flexible(
+                                    flex: 4,
+                                    child: Text(
+                                      lastMessage.text == '' ? 'No messages' : lastMessage.text,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: getMeduimStyle(color: ColorManager.darkGrey.withOpacity(0.8)),
+                                    ),
+                                  ),
+                                  Flexible(
+                                    flex: 1,
+                                    child: Text(
+                                      lastMessage.dateTime == '' ? "" : cubit.extractTime(lastMessage.dateTime),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: getMeduimStyle(color: ColorManager.dark),
+                                    ),
+                                  ),
+                                ],
+                              );
+                            } else {
+                              return const Text('Last message not available');
+                            }
                           }
-                        }
-                      },
-                    )
-                  ],
-                ),
-                SizedBox(
-                  height: AppSize.s15.sp,
-                ),
-                Container(
-                  height: AppSize.s1.sp,
-                  width: AppSize.s310.sp,
-                  color: ColorManager.grey.withOpacity(0.8),
-                ),
-              ],
+                        },
+                      )
+                    ],
+                  ),
+                  SizedBox(
+                    height: AppSize.s15.sp,
+                  ),
+                  Container(
+                    height: AppSize.s1.sp,
+                    // width: AppSize.s310.sp,
+                    color: ColorManager.grey.withOpacity(0.8),
+                  ),
+                ],
+              ),
             )
           ],
         ),
