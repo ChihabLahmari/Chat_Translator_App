@@ -47,6 +47,7 @@ class _MainViewState extends State<MainView> with TickerProviderStateMixin {
                 color: ColorManager.dark,
               ),
               const EndDrawerButton(),
+              SizedBox(width: AppSize.s5.sp),
 
               // IconButton(
               //   onPressed: () {
@@ -60,7 +61,7 @@ class _MainViewState extends State<MainView> with TickerProviderStateMixin {
           body: (state is MainGetAllUsersLoadingState)
               ? loadingScreen()
               : Padding(
-                  padding: EdgeInsets.all(AppPadding.p16.sp),
+                  padding: EdgeInsets.all(AppPadding.p16.sp).copyWith(top: AppPadding.p8.sp),
                   child: Column(
                     children: [
                       TabBarContainer(tabController: tabController),
@@ -363,7 +364,9 @@ class UserListtile extends StatelessWidget {
                               SizedBox(width: AppPadding.p4.sp),
                               Text(
                                 user.firstLanguage,
-                                style: getMeduimStyle(color: ColorManager.dark),
+                                style: getMeduimStyle(color: ColorManager.dark).copyWith(
+                                  fontWeight: FontWeight.normal,
+                                ),
                               ),
                             ],
                           )
@@ -401,7 +404,8 @@ class UserListtile extends StatelessWidget {
                                       lastMessage.dateTime == '' ? "" : cubit.extractTime(lastMessage.dateTime),
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
-                                      style: getMeduimStyle(color: ColorManager.dark),
+                                      style: getMeduimStyle(color: ColorManager.dark)
+                                          .copyWith(fontWeight: FontWeight.normal),
                                     ),
                                   ),
                                 ],
