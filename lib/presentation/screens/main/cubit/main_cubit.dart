@@ -110,11 +110,11 @@ class MainCubit extends Cubit<MainStates> {
 
   void addOnlineUser(String id) {
     // Find the user with the given ID
-    user = users.firstWhere((element) => element.id == id);
+    Customer? favoriteUser = users.firstWhere((element) => element.id == id);
 
     // If the user is found and not already in the onlineUsers list, add it
-    if (user != null && !onlineUsers.contains(user)) {
-      onlineUsers.add(user!);
+    if (!onlineUsers.contains(favoriteUser)) {
+      onlineUsers.add(favoriteUser);
     }
   }
 }
