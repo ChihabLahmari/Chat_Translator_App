@@ -1,4 +1,5 @@
 import 'package:chat_translator/presentation/components/appsize.dart';
+import 'package:chat_translator/presentation/components/assets_manager.dart';
 import 'package:chat_translator/presentation/components/color_manager.dart';
 import 'package:chat_translator/presentation/components/strings_manager.dart';
 import 'package:chat_translator/presentation/components/styles_manager.dart';
@@ -69,9 +70,9 @@ class RegisterView extends StatelessWidget {
                       ),
                       CupertinoSlidingSegmentedControl(
                         children: const {
-                          0: Image(image: AssetImage('assets/images/boySticker.png')),
-                          1: Image(image: AssetImage('assets/images/girl2Sticker.png')),
-                          2: Image(image: AssetImage('assets/images/belliSticker.png')),
+                          0: Image(image: AssetImage(ImageAsset.boySticker)),
+                          1: Image(image: AssetImage(ImageAsset.girlSticker)),
+                          2: Image(image: AssetImage(ImageAsset.belliSticker)),
                           // 3: Image(image: AssetImage('assets/images/boy2Sticker.png')),
                           // 4: Image(image: AssetImage('assets/images/boy3Sticker.png')),
                           // 1: Image(image: AssetImage('assets/images/girlSticker.png')),

@@ -35,16 +35,32 @@ class PresentationConstances {
   }
 
   static String getImage(String imageNum) {
-    if (imageNum == '0') return ImageAsset.boySticker;
-    if (imageNum == '1') return ImageAsset.girlSticker;
-    if (imageNum == '2') return ImageAsset.belliSticker;
-    return ImageAsset.belliSticker;
+    switch (imageNum) {
+      case '0':
+        return ImageAsset.boySticker;
+      case '1':
+        return ImageAsset.girlSticker;
+      case '2':
+        return ImageAsset.belliSticker;
+      case '3':
+        return ImageAsset.boy2Sticker;
+      default:
+        return ImageAsset.belliSticker;
+    }
   }
 
   static Color getImageColor(String imageNum) {
-    if (imageNum == '0') return ColorManager.yellow;
-    if (imageNum == '1') return ColorManager.purple;
-    if (imageNum == '2') return ColorManager.blue;
-    return ColorManager.blue;
+    switch (imageNum) {
+      case '0':
+        return ColorManager.yellow;
+      case '1':
+        return ColorManager.purple;
+      case '2':
+        return ColorManager.blue;
+      case '3':
+        return ColorManager.greenLight;
+      default:
+        return ColorManager.blue;
+    }
   }
 }

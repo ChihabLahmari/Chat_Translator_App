@@ -135,37 +135,24 @@ Widget customPasswordFormField({
 }
 
 Widget customElevatodButton(String label, Function()? onPressed) {
-  return Container(
-    decoration: BoxDecoration(
-      boxShadow: [
-        if (onPressed != null)
-          BoxShadow(
-            color: ColorManager.orange.withOpacity(0.3),
-            spreadRadius: 3,
-            blurRadius: 12,
-            offset: const Offset(0, 0),
-          ),
-      ],
-    ),
-    child: ElevatedButton(
-        onPressed: onPressed,
-        style: ElevatedButton.styleFrom(
-          backgroundColor: ColorManager.orange,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(AppPadding.p18.sp),
-          ),
+  return ElevatedButton(
+      onPressed: onPressed,
+      style: ElevatedButton.styleFrom(
+        backgroundColor: ColorManager.orange,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(AppPadding.p18.sp),
         ),
-        child: Padding(
-          padding: EdgeInsets.symmetric(
-            vertical: AppPadding.p20.sp,
-            horizontal: AppPadding.p30.sp,
-          ),
-          child: Text(
-            label.toUpperCase(),
-            style: getRegularStyle(color: ColorManager.white),
-          ),
-        )),
-  );
+      ),
+      child: Padding(
+        padding: EdgeInsets.symmetric(
+          vertical: AppPadding.p20.sp,
+          horizontal: AppPadding.p30.sp,
+        ),
+        child: Text(
+          label.toUpperCase(),
+          style: getRegularStyle(color: ColorManager.white),
+        ),
+      ));
 }
 
 // Toasts ::
