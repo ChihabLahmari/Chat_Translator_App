@@ -89,67 +89,68 @@ class CustomDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Drawer(
+        backgroundColor: ColorManager.white,
         child: SafeArea(
-      child: Column(
-        children: [
-          CircleAvatar(
-            backgroundColor: PresentationConstances.getImageColor(cubit.user?.image ?? '1'),
-            minRadius: AppSize.s50.sp,
-            maxRadius: AppSize.s50.sp,
-            child: Center(
-              child: Image(image: AssetImage(PresentationConstances.getImage(cubit.user?.image ?? '1'))),
-            ),
-          ),
-          SizedBox(height: AppSize.s15.sp),
-          Text(
-            cubit.user?.fullName ?? '',
-            style: getlargeStyle(color: ColorManager.dark),
-          ),
-          SizedBox(height: AppSize.s10.sp),
-          ListTile(
-            onTap: () {
-              Navigator.pop(context);
-              showDialog(
-                context: context,
-                builder: (context) {
-                  return logoutDialog(context, cubit);
+          child: Column(
+            children: [
+              CircleAvatar(
+                backgroundColor: PresentationConstances.getImageColor(cubit.user?.image ?? '1'),
+                minRadius: AppSize.s50.sp,
+                maxRadius: AppSize.s50.sp,
+                child: Center(
+                  child: Image(image: AssetImage(PresentationConstances.getImage(cubit.user?.image ?? '1'))),
+                ),
+              ),
+              SizedBox(height: AppSize.s15.sp),
+              Text(
+                cubit.user?.fullName ?? '',
+                style: getlargeStyle(color: ColorManager.dark),
+              ),
+              SizedBox(height: AppSize.s10.sp),
+              ListTile(
+                onTap: () {
+                  Navigator.pop(context);
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      return logoutDialog(context, cubit);
+                    },
+                  );
                 },
-              );
-            },
-            leading: Icon(
-              Icons.logout_outlined,
-              color: ColorManager.dark,
-            ),
-            title: Text(
-              AppStrings.logout,
-              style: getMeduimStyle(color: ColorManager.dark),
-            ),
+                leading: Icon(
+                  Icons.logout_outlined,
+                  color: ColorManager.dark,
+                ),
+                title: Text(
+                  AppStrings.logout,
+                  style: getMeduimStyle(color: ColorManager.dark),
+                ),
+              ),
+              SizedBox(height: AppSize.s10.sp),
+              ListTile(
+                leading: Icon(
+                  Icons.dark_mode_outlined,
+                  color: ColorManager.dark,
+                ),
+                title: Text(
+                  AppStrings.darkLightMode,
+                  style: getMeduimStyle(color: ColorManager.dark),
+                ),
+              ),
+              SizedBox(height: AppSize.s10.sp),
+              ListTile(
+                leading: Icon(
+                  Icons.settings,
+                  color: ColorManager.dark,
+                ),
+                title: Text(
+                  AppStrings.settings,
+                  style: getMeduimStyle(color: ColorManager.dark),
+                ),
+              ),
+            ],
           ),
-          SizedBox(height: AppSize.s10.sp),
-          ListTile(
-            leading: Icon(
-              Icons.dark_mode_outlined,
-              color: ColorManager.dark,
-            ),
-            title: Text(
-              AppStrings.darkLightMode,
-              style: getMeduimStyle(color: ColorManager.dark),
-            ),
-          ),
-          SizedBox(height: AppSize.s10.sp),
-          ListTile(
-            leading: Icon(
-              Icons.settings,
-              color: ColorManager.dark,
-            ),
-            title: Text(
-              AppStrings.settings,
-              style: getMeduimStyle(color: ColorManager.dark),
-            ),
-          ),
-        ],
-      ),
-    ));
+        ));
   }
 }
 
@@ -310,14 +311,14 @@ class UserListtile extends StatelessWidget {
                     if (snapshot.data == true) {
                       cubit.addOnlineUser(user.id);
                       return Container(
-                        width: 20,
-                        height: 20,
+                        width: AppSize.s20.sp,
+                        height: AppSize.s20.sp,
                         decoration: BoxDecoration(
                           color: ColorManager.white,
                           borderRadius: BorderRadius.circular(AppPadding.p12.sp),
                         ),
                         child: Padding(
-                          padding: EdgeInsets.all(AppSize.s2.sp),
+                          padding: EdgeInsets.all(AppPadding.p2.sp),
                           child: Container(
                             decoration: BoxDecoration(
                               color: ColorManager.green,
@@ -433,7 +434,7 @@ class UserListtile extends StatelessWidget {
 Widget logoutDialog(BuildContext context, MainCubit cubit) {
   return AlertDialog(
     backgroundColor: ColorManager.white,
-    shadowColor: ColorManager.orange.withOpacity(0.5),
+    // shadowColor: ColorManager.orange.withOpacity(0.5),
     content: SizedBox(
       height: AppSize.s120.sp,
       // width: double.maxFinite,
