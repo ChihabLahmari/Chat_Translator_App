@@ -10,6 +10,7 @@ class ImageAsset {
   static const String girl2Sticker = "$imagePath/girl2Sticker.png";
   static const String girl3Sticker = "$imagePath/girl3Sticker.png";
   static const String message = "$imagePath/message.png";
+  static const String gdgLogo = "$imagePath/gdg_logo.png";
 }
 
 class LottieAsset {

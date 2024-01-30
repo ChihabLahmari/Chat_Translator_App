@@ -1,5 +1,6 @@
 import 'package:chat_translator/domain/entities/entities.dart';
 import 'package:chat_translator/presentation/components/appsize.dart';
+import 'package:chat_translator/presentation/components/assets_manager.dart';
 import 'package:chat_translator/presentation/components/color_manager.dart';
 import 'package:chat_translator/presentation/components/constances.dart';
 import 'package:chat_translator/presentation/components/font_manager.dart';
@@ -41,21 +42,14 @@ class _MainViewState extends State<MainView> with TickerProviderStateMixin {
             centerTitle: false,
             title: Text(AppStrings.appName),
             actions: [
-              IconButton(
-                onPressed: () {},
-                icon: const Icon(Icons.search_outlined),
-                color: ColorManager.dark,
+              const SizedBox(
+                width: 50,
+                child: Image(
+                  image: AssetImage(ImageAsset.gdgLogo),
+                ),
               ),
               const EndDrawerButton(),
               SizedBox(width: AppSize.s5.sp),
-
-              // IconButton(
-              //   onPressed: () {
-              //     const Drawer();
-              //   },
-              //   icon: const Icon(Icons.menu_outlined),
-              //   color: ColorManager.dark,
-              // ),
             ],
           ),
           body: (state is MainGetAllUsersLoadingState)
@@ -479,7 +473,6 @@ Widget logoutDialog(BuildContext context, MainCubit cubit) {
                 child: InkWell(
                   onTap: () {
                     cubit.logout();
-
                     Navigator.pushAndRemoveUntil(
                         context,
                         MaterialPageRoute(
