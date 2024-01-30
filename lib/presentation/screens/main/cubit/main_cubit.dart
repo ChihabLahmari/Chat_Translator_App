@@ -106,6 +106,10 @@ class MainCubit extends Cubit<MainStates> {
   void logout() {
     _appPrefernces.removeUserId();
     _appPrefernces.removeUserLoggedIn();
+    users = [];
+    onlineUsers = [];
+    myId = '';
+    user = null;
   }
 
   void addOnlineUser(String id) {
