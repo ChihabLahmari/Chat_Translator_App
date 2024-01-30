@@ -221,4 +221,29 @@ class ChatCubit extends Cubit<ChatStates> {
       return null;
     }
   }
+
+  String? extractTimeReverse(String inputString) {
+    try {
+      // Parse the string into a DateTime object
+      DateTime dateTime = DateTime.parse(inputString);
+
+      // Get the current date
+      DateTime currentDate = DateTime.now();
+
+      // Check if the date is today
+      if (dateTime.year == currentDate.year && dateTime.month == currentDate.month && dateTime.day == currentDate.day) {
+        // Format the DateTime to get the time part only
+        String formattedMinute = dateTime.minute.toString().padLeft(2, '0');
+        return "${dateTime.hour}:$formattedMinute";
+      } else {
+        // Format the DateTime to include the date and time
+        String formattedMinute = dateTime.minute.toString().padLeft(2, '0');
+        return "${dateTime.hour}:$formattedMinute  ${dateTime.year}-${dateTime.month}-${dateTime.day}  ";
+      }
+    } catch (e) {
+      // Handle parsing errors or invalid input strings
+      print("Error parsing the input string: $e");
+      return null;
+    }
+  }
 }

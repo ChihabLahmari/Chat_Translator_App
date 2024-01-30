@@ -25,25 +25,6 @@ class ChatView extends StatefulWidget {
 }
 
 class _ChatViewState extends State<ChatView> {
-  // late StreamSubscription<bool> subscription;
-
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   var keyboardVisibilityController = KeyboardVisibilityController();
-  //   subscription = keyboardVisibilityController.onChange.listen((bool visible) {
-  //     print('Keyboard visibility update. Is visible: $visible');
-  //     ChatCubit().updateTypingStatus(widget.friendData.id, widget.myData.id, visible);
-  //   });
-  // }
-
-  // @override
-  // void dispose() {
-  //   subscription.cancel();
-  //   FocusScope.of(context).unfocus();
-  //   super.dispose();
-  // }
-
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -56,11 +37,11 @@ class _ChatViewState extends State<ChatView> {
           return Scaffold(
             backgroundColor: ColorManager.whiteGrey,
             appBar: AppBar(
-              toolbarHeight: AppSize.s80,
+              toolbarHeight: AppSize.s80.sp,
               backgroundColor: ColorManager.white,
-              leadingWidth: AppSize.s60,
+              leadingWidth: AppSize.s70.sp,
               leading: Padding(
-                padding: EdgeInsets.only(left: AppPadding.p4.sp),
+                padding: EdgeInsets.only(left: AppPadding.p14.sp),
                 child: CircleAvatar(
                   backgroundColor: widget.friendData.image == '1' ? ColorManager.purple : ColorManager.blue,
                   child: Center(
@@ -77,33 +58,27 @@ class _ChatViewState extends State<ChatView> {
                   ),
                   Text(
                     widget.friendData.firstLanguage,
-                    style: getMeduimStyle(color: ColorManager.orange),
+                    style: getMeduimStyle(color: ColorManager.orange).copyWith(fontWeight: FontWeight.normal),
                   ),
                 ],
               ),
               centerTitle: false,
               actions: [
-                IconButton(
-                  onPressed: () {},
-                  icon: Icon(
-                    Icons.videocam_outlined,
-                    color: ColorManager.dark,
-                  ),
+                Icon(
+                  Icons.videocam_outlined,
+                  color: ColorManager.dark,
                 ),
-                IconButton(
-                  onPressed: () {},
-                  icon: Icon(
-                    Icons.call_outlined,
-                    color: ColorManager.dark,
-                  ),
+                const SizedBox(width: AppPadding.p8),
+                Icon(
+                  Icons.call_outlined,
+                  color: ColorManager.dark,
                 ),
-                IconButton(
-                  onPressed: () {},
-                  icon: Icon(
-                    Icons.more_vert_outlined,
-                    color: ColorManager.dark,
-                  ),
+                const SizedBox(width: AppPadding.p8),
+                Icon(
+                  Icons.more_vert_outlined,
+                  color: ColorManager.dark,
                 ),
+                const SizedBox(width: AppPadding.p8),
               ],
               elevation: 4,
               shadowColor: ColorManager.grey,
@@ -140,7 +115,7 @@ class StreamChatBuilder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(bottom: AppPadding.p120.sp),
+      padding: EdgeInsets.only(bottom: AppPadding.p100.sp, right: AppPadding.p8.sp, left: AppPadding.p8.sp),
       child: Column(
         children: [
           Expanded(
@@ -245,6 +220,7 @@ class MyMessageContainer extends StatelessWidget {
             Text(
               cubit.extractTime(message.dateTime) ?? "",
               style: getSmallStyle(color: ColorManager.dark),
+              overflow: TextOverflow.ellipsis,
             ),
             SizedBox(width: AppPadding.p6.sp),
             Container(
@@ -254,14 +230,14 @@ class MyMessageContainer extends StatelessWidget {
                 boxShadow: [
                   BoxShadow(
                     color: ColorManager.orange.withOpacity(0.3),
-                    spreadRadius: 5,
-                    blurRadius: 7,
+                    spreadRadius: 2,
+                    blurRadius: 8,
                     offset: const Offset(0, 5),
                   ),
                 ],
               ),
               constraints: BoxConstraints(
-                maxWidth: AppSize.s300.sp,
+                maxWidth: AppSize.s280.sp,
               ),
               child: Padding(
                 padding: EdgeInsets.all(AppPadding.p8.sp),
@@ -306,14 +282,14 @@ class FriendMessageContainer extends StatelessWidget {
                 boxShadow: [
                   BoxShadow(
                     color: ColorManager.grey,
-                    spreadRadius: 5,
-                    blurRadius: 7,
+                    spreadRadius: 2,
+                    blurRadius: 8,
                     offset: const Offset(0, 5), // Adjust the offset for the bottom shadow
                   ),
                 ],
               ),
               constraints: BoxConstraints(
-                maxWidth: AppSize.s300.sp,
+                maxWidth: AppSize.s280.sp,
               ),
               // width: AppSize.s300.sp,
               child: Padding(
@@ -328,8 +304,9 @@ class FriendMessageContainer extends StatelessWidget {
             ),
             SizedBox(width: AppPadding.p6.sp),
             Text(
-              cubit.extractTime(message.dateTime) ?? "",
+              cubit.extractTimeReverse(message.dateTime) ?? "",
               style: getSmallStyle(color: ColorManager.dark),
+              overflow: TextOverflow.ellipsis,
             ),
           ],
         ),
@@ -358,7 +335,7 @@ class BottomBar extends StatelessWidget {
       alignment: Alignment.bottomCenter,
       child: Container(
         width: double.infinity,
-        height: AppSize.s120.sp,
+        height: AppSize.s110.sp,
         decoration: BoxDecoration(
           color: ColorManager.white,
           boxShadow: [
@@ -369,7 +346,7 @@ class BottomBar extends StatelessWidget {
           ],
         ),
         child: Padding(
-          padding: EdgeInsets.all(AppPadding.p10.sp).copyWith(top: AppPadding.p16.sp),
+          padding: EdgeInsets.all(AppPadding.p14.sp).copyWith(top: AppPadding.p16.sp),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
