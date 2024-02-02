@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:chat_translator/domain/entities/entities.dart';
 import 'package:chat_translator/presentation/components/appsize.dart';
 import 'package:chat_translator/presentation/components/assets_manager.dart';
@@ -23,6 +25,26 @@ class MainView extends StatefulWidget {
 }
 
 class _MainViewState extends State<MainView> with TickerProviderStateMixin {
+  Timer? timer;
+  @override
+  void initState() {
+    timer = Timer.periodic(
+      const Duration(seconds: 10),
+      (timer) {
+        MainCubit.get(context).changeLogoAlignment();
+      },
+    );
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    if (timer != null) {
+      timer!.cancel();
+    }
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     print('build _MainViewState');
@@ -35,12 +57,6 @@ class _MainViewState extends State<MainView> with TickerProviderStateMixin {
         centerTitle: false,
         title: Text(AppStrings.appName),
         actions: [
-          const SizedBox(
-            width: 50,
-            child: Image(
-              image: AssetImage(ImageAsset.gdgLogo),
-            ),
-          ),
           const EndDrawerButton(),
           SizedBox(width: AppSize.s5.sp),
         ],
@@ -51,12 +67,44 @@ class _MainViewState extends State<MainView> with TickerProviderStateMixin {
           children: [
             TabBarContainer(tabController: tabController),
             Expanded(
-              child: TabBarView(
-                controller: tabController,
+              child: Stack(
                 children: [
-                  const UserListview(),
-                  const OnlineUserListview(),
-                  loadingScreen(),
+                  TabBarView(
+                    controller: tabController,
+                    children: [
+                      const UserListview(),
+                      const OnlineUserListview(),
+                      loadingScreen(),
+                    ],
+                  ),
+                  BlocBuilder<MainCubit, MainStates>(
+                    buildWhen: (previous, current) => current is MainChangeLogoAlignmentState,
+                    builder: (context, state) {
+                      var cubit = MainCubit.get(context);
+                      return SizedBox(
+                        width: double.infinity,
+                        child: GestureDetector(
+                          onTap: () {
+                            cubit.changeLogoAlignment();
+                          },
+                          child: AnimatedAlign(
+                            duration: const Duration(seconds: 1),
+                            alignment: cubit.alignment,
+                            // curve: Curves.decelerate,
+                            // curve: Curves.bounceOut,
+                            curve: Curves.elasticIn,
+                            // curve: Curves.elasticInOut,
+                            child: SizedBox(
+                              width: AppSize.s70.sp,
+                              child: const Image(
+                                image: AssetImage(ImageAsset.gdgLogo),
+                              ),
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
                 ],
               ),
             ),

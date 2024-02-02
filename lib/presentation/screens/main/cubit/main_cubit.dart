@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:chat_translator/core/services/services_locator.dart';
 import 'package:chat_translator/core/services/shared_prefrences.dart';
 import 'package:chat_translator/domain/entities/entities.dart';
@@ -6,6 +8,7 @@ import 'package:chat_translator/domain/usecase/get_is_user_online_usecase.dart';
 import 'package:chat_translator/domain/usecase/get_last_message_usecase.dart';
 import 'package:chat_translator/domain/usecase/update_user_online_status.usecase.dart';
 import 'package:chat_translator/presentation/screens/main/cubit/main_states.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class MainCubit extends Cubit<MainStates> {
@@ -110,6 +113,8 @@ class MainCubit extends Cubit<MainStates> {
     onlineUsers = [];
     myId = '';
     user = null;
+    alignment = Alignment.centerRight;
+    nbr = 0;
   }
 
   void addOnlineUser(String id) {
@@ -121,5 +126,34 @@ class MainCubit extends Cubit<MainStates> {
       onlineUsers.add(favoriteUser);
       emit(MainAddOnlineUserState());
     }
+  }
+
+  AlignmentGeometry alignment = Alignment.centerRight;
+  int nbr = 0;
+
+  void changeLogoAlignment() {
+    int x = nbr;
+    while (nbr == x) {
+      nbr = Random().nextInt(7);
+    }
+    switch (nbr) {
+      case 0:
+        alignment = Alignment.centerRight;
+      case 1:
+        alignment = Alignment.centerLeft;
+      case 2:
+        alignment = Alignment.topLeft;
+      case 3:
+        alignment = Alignment.topRight;
+      case 4:
+        alignment = Alignment.bottomRight;
+      case 5:
+        alignment = Alignment.bottomLeft;
+      case 6:
+        alignment = Alignment.center;
+      default:
+        alignment = Alignment.centerRight;
+    }
+    emit(MainChangeLogoAlignmentState());
   }
 }

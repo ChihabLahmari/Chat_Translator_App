@@ -34,3 +34,6 @@ class MainUpdateUserOnlineStatusError extends MainStates {
 
 
 class MainAddOnlineUserState extends MainStates {}
+
+class MainChangeLogoAlignmentState extends MainStates {}
+
