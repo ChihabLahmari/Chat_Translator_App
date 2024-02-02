@@ -25,55 +25,44 @@ class MainView extends StatefulWidget {
 class _MainViewState extends State<MainView> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<MainCubit, MainStates>(
-      listener: (context, state) {
-        if (state is MainGetAllUsersErrorState) {
-          errorToast(state.error).show(context);
-        }
-      },
-      builder: (context, state) {
-        TabController tabController = TabController(length: 3, vsync: this);
-        var cubit = MainCubit.get(context);
-        return Scaffold(
-          backgroundColor: ColorManager.white,
-          endDrawer: CustomDrawer(cubit: cubit),
-          appBar: AppBar(
-            iconTheme: IconThemeData(color: ColorManager.dark),
-            centerTitle: false,
-            title: Text(AppStrings.appName),
-            actions: [
-              const SizedBox(
-                width: 50,
-                child: Image(
-                  image: AssetImage(ImageAsset.gdgLogo),
-                ),
-              ),
-              const EndDrawerButton(),
-              SizedBox(width: AppSize.s5.sp),
-            ],
+    print('build _MainViewState');
+    TabController tabController = TabController(length: 3, vsync: this);
+    return Scaffold(
+      backgroundColor: ColorManager.white,
+      endDrawer: const CustomDrawer(),
+      appBar: AppBar(
+        iconTheme: IconThemeData(color: ColorManager.dark),
+        centerTitle: false,
+        title: Text(AppStrings.appName),
+        actions: [
+          const SizedBox(
+            width: 50,
+            child: Image(
+              image: AssetImage(ImageAsset.gdgLogo),
+            ),
           ),
-          body: (state is MainGetAllUsersLoadingState)
-              ? loadingScreen()
-              : Padding(
-                  padding: EdgeInsets.all(AppPadding.p16.sp).copyWith(top: AppPadding.p8.sp),
-                  child: Column(
-                    children: [
-                      TabBarContainer(tabController: tabController),
-                      Expanded(
-                        child: TabBarView(
-                          controller: tabController,
-                          children: [
-                            UserListview(cubit: cubit),
-                            OnlineUserListview(cubit: cubit),
-                            loadingScreen(),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-        );
-      },
+          const EndDrawerButton(),
+          SizedBox(width: AppSize.s5.sp),
+        ],
+      ),
+      body: Padding(
+        padding: EdgeInsets.all(AppPadding.p16.sp).copyWith(top: AppPadding.p8.sp),
+        child: Column(
+          children: [
+            TabBarContainer(tabController: tabController),
+            Expanded(
+              child: TabBarView(
+                controller: tabController,
+                children: [
+                  const UserListview(),
+                  const OnlineUserListview(),
+                  loadingScreen(),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
@@ -81,76 +70,84 @@ class _MainViewState extends State<MainView> with TickerProviderStateMixin {
 class CustomDrawer extends StatelessWidget {
   const CustomDrawer({
     super.key,
-    required this.cubit,
   });
-
-  final MainCubit cubit;
 
   @override
   Widget build(BuildContext context) {
-    return Drawer(
-        backgroundColor: ColorManager.white,
-        child: SafeArea(
-          child: Column(
-            children: [
-              CircleAvatar(
-                backgroundColor: PresentationConstances.getImageColor(cubit.user?.image ?? '1'),
-                minRadius: AppSize.s50.sp,
-                maxRadius: AppSize.s50.sp,
-                child: Center(
-                  child: Image(image: AssetImage(PresentationConstances.getImage(cubit.user?.image ?? '1'))),
+    print('build Drawer');
+    return BlocConsumer<MainCubit, MainStates>(
+      buildWhen: (previous, current) {
+        return current is MainGetMyUserState;
+      },
+      listener: (context, state) {},
+      builder: ((context, state) {
+        var cubit = MainCubit.get(context);
+        return Drawer(
+          backgroundColor: ColorManager.white,
+          child: SafeArea(
+            child: Column(
+              children: [
+                CircleAvatar(
+                  backgroundColor: PresentationConstances.getImageColor(cubit.user?.image ?? '1'),
+                  minRadius: AppSize.s50.sp,
+                  maxRadius: AppSize.s50.sp,
+                  child: Center(
+                    child: Image(image: AssetImage(PresentationConstances.getImage(cubit.user?.image ?? '1'))),
+                  ),
                 ),
-              ),
-              SizedBox(height: AppSize.s15.sp),
-              Text(
-                cubit.user?.fullName ?? '',
-                style: getlargeStyle(color: ColorManager.dark),
-              ),
-              SizedBox(height: AppSize.s10.sp),
-              ListTile(
-                onTap: () {
-                  Navigator.pop(context);
-                  showDialog(
-                    context: context,
-                    builder: (context) {
-                      return logoutDialog(context, cubit);
-                    },
-                  );
-                },
-                leading: Icon(
-                  Icons.logout_outlined,
-                  color: ColorManager.dark,
+                SizedBox(height: AppSize.s15.sp),
+                Text(
+                  cubit.user?.fullName ?? '',
+                  style: getlargeStyle(color: ColorManager.dark),
                 ),
-                title: Text(
-                  AppStrings.logout,
-                  style: getMeduimStyle(color: ColorManager.dark),
+                SizedBox(height: AppSize.s10.sp),
+                ListTile(
+                  onTap: () {
+                    Navigator.pop(context);
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return logoutDialog(context, cubit);
+                      },
+                    );
+                  },
+                  leading: Icon(
+                    Icons.logout_outlined,
+                    color: ColorManager.dark,
+                  ),
+                  title: Text(
+                    AppStrings.logout,
+                    style: getMeduimStyle(color: ColorManager.dark),
+                  ),
                 ),
-              ),
-              SizedBox(height: AppSize.s10.sp),
-              ListTile(
-                leading: Icon(
-                  Icons.dark_mode_outlined,
-                  color: ColorManager.dark,
+                SizedBox(height: AppSize.s10.sp),
+                ListTile(
+                  leading: Icon(
+                    Icons.dark_mode_outlined,
+                    color: ColorManager.dark,
+                  ),
+                  title: Text(
+                    AppStrings.darkLightMode,
+                    style: getMeduimStyle(color: ColorManager.dark),
+                  ),
                 ),
-                title: Text(
-                  AppStrings.darkLightMode,
-                  style: getMeduimStyle(color: ColorManager.dark),
+                SizedBox(height: AppSize.s10.sp),
+                ListTile(
+                  leading: Icon(
+                    Icons.settings,
+                    color: ColorManager.dark,
+                  ),
+                  title: Text(
+                    AppStrings.settings,
+                    style: getMeduimStyle(color: ColorManager.dark),
+                  ),
                 ),
-              ),
-              SizedBox(height: AppSize.s10.sp),
-              ListTile(
-                leading: Icon(
-                  Icons.settings,
-                  color: ColorManager.dark,
-                ),
-                title: Text(
-                  AppStrings.settings,
-                  style: getMeduimStyle(color: ColorManager.dark),
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ));
+        );
+      }),
+    );
   }
 }
 
@@ -216,23 +213,42 @@ class TabBarContainer extends StatelessWidget {
 class UserListview extends StatelessWidget {
   const UserListview({
     super.key,
-    required this.cubit,
   });
-
-  final MainCubit cubit;
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: cubit.users.length,
-      physics: const BouncingScrollPhysics(),
-      shrinkWrap: true,
-      itemBuilder: (context, index) {
-        var user = cubit.users[index];
-        return UserListtile(
-          user: user,
-          cubit: cubit,
-        );
+    print('build UserListview');
+
+    return BlocConsumer<MainCubit, MainStates>(
+      buildWhen: (previous, current) {
+        return previous is MainGetAllUsersLoadingState ||
+            previous is MainGetAllUsersSuccessState ||
+            previous is MainGetAllUsersErrorState ||
+            current is MainGetAllUsersLoadingState ||
+            current is MainGetAllUsersSuccessState ||
+            current is MainGetAllUsersErrorState;
+      },
+      listener: (context, state) {
+        if (state is MainGetAllUsersErrorState) {
+          errorToast(state.error).show(context);
+        }
+      },
+      builder: (context, state) {
+        var cubit = MainCubit.get(context);
+        return (state is MainGetAllUsersLoadingState)
+            ? loadingScreen()
+            : ListView.builder(
+                itemCount: cubit.users.length,
+                physics: const BouncingScrollPhysics(),
+                shrinkWrap: true,
+                itemBuilder: (context, index) {
+                  var user = cubit.users[index];
+                  return UserListtile(
+                    user: user,
+                    cubit: cubit,
+                  );
+                },
+              );
       },
     );
   }
@@ -241,23 +257,38 @@ class UserListview extends StatelessWidget {
 class OnlineUserListview extends StatelessWidget {
   const OnlineUserListview({
     super.key,
-    required this.cubit,
   });
-
-  final MainCubit cubit;
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: cubit.onlineUsers.length,
-      physics: const BouncingScrollPhysics(),
-      shrinkWrap: true,
-      itemBuilder: (context, index) {
-        var user = cubit.onlineUsers[index];
-        return UserListtile(
-          user: user,
-          cubit: cubit,
-        );
+    print('build OnlineUserListview');
+    return BlocConsumer<MainCubit, MainStates>(
+      buildWhen: (previous, current) {
+        return previous is MainGetAllUsersLoadingState ||
+            previous is MainGetAllUsersSuccessState ||
+            previous is MainGetAllUsersErrorState ||
+            current is MainGetAllUsersLoadingState ||
+            current is MainGetAllUsersSuccessState ||
+            current is MainGetAllUsersErrorState ||
+            current is MainAddOnlineUserState;
+      },
+      listener: (context, state) {},
+      builder: (context, state) {
+        var cubit = MainCubit.get(context);
+        return (state is MainGetAllUsersLoadingState)
+            ? loadingScreen()
+            : ListView.builder(
+                itemCount: cubit.onlineUsers.length,
+                physics: const BouncingScrollPhysics(),
+                shrinkWrap: true,
+                itemBuilder: (context, index) {
+                  var user = cubit.onlineUsers[index];
+                  return UserListtile(
+                    user: user,
+                    cubit: cubit,
+                  );
+                },
+              );
       },
     );
   }

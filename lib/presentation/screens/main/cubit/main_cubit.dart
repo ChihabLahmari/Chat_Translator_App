@@ -119,6 +119,7 @@ class MainCubit extends Cubit<MainStates> {
     // If the user is found and not already in the onlineUsers list, add it
     if (!onlineUsers.contains(favoriteUser)) {
       onlineUsers.add(favoriteUser);
+      emit(MainAddOnlineUserState());
     }
   }
 }

@@ -31,3 +31,6 @@ class MainUpdateUserOnlineStatusError extends MainStates {
 
   MainUpdateUserOnlineStatusError(this.error);
 }
+
+
+class MainAddOnlineUserState extends MainStates {}
