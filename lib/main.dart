@@ -7,6 +7,7 @@ import 'package:chat_translator/presentation/screens/main/view/main_view.dart';
 import 'package:chat_translator/presentation/screens/onBoarding/view/onBoarding_view.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -15,6 +16,11 @@ void main() async {
   await Firebase.initializeApp();
 
   await ServiceLocator().init();
+
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
   runApp(const MainApp());
 }
 

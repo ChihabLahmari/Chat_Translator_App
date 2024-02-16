@@ -37,52 +37,45 @@ class _ChatViewState extends State<ChatView> {
           return Scaffold(
             backgroundColor: ColorManager.whiteGrey,
             appBar: AppBar(
-              toolbarHeight: AppSize.s80.sp,
+              // toolbarHeight: AppSize.s80.sp,
               backgroundColor: ColorManager.white,
               leadingWidth: AppSize.s70.sp,
-              leading: Padding(
-                padding: EdgeInsets.only(left: AppPadding.p14.sp),
-                child: CircleAvatar(
-                  backgroundColor: widget.friendData.image == '1' ? ColorManager.purple : ColorManager.blue,
-                  child: Center(
-                    child: Image(image: AssetImage(PresentationConstances.getImage(widget.friendData.image))),
-                  ),
-                ),
-              ),
-              title: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              title: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text(
-                    widget.friendData.fullName,
-                    style: getRegularStyle(color: ColorManager.dark),
+                  CircleAvatar(
+                    backgroundColor: widget.friendData.image == '1' ? ColorManager.purple : ColorManager.blue,
+                    child: Center(
+                      child: Image(image: AssetImage(PresentationConstances.getImage(widget.friendData.image))),
+                    ),
                   ),
-                  Text(
-                    widget.friendData.firstLanguage,
-                    style: getMeduimStyle(color: ColorManager.orange).copyWith(fontWeight: FontWeight.normal),
+                  SizedBox(width: AppSize.s12.sp),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        widget.friendData.fullName,
+                        style: getRegularStyle(color: ColorManager.dark),
+                      ),
+                      Text(
+                        widget.friendData.firstLanguage,
+                        style: getMeduimStyle(color: ColorManager.orange).copyWith(fontWeight: FontWeight.normal),
+                      ),
+                    ],
                   ),
                 ],
               ),
-              centerTitle: false,
-              actions: [
-                Icon(
-                  Icons.videocam_outlined,
-                  color: ColorManager.dark,
-                ),
-                const SizedBox(width: AppPadding.p8),
-                Icon(
-                  Icons.call_outlined,
-                  color: ColorManager.dark,
-                ),
-                const SizedBox(width: AppPadding.p8),
-                Icon(
-                  Icons.more_vert_outlined,
-                  color: ColorManager.dark,
-                ),
-                const SizedBox(width: AppPadding.p8),
-              ],
+              centerTitle: true,
               elevation: 4,
               shadowColor: ColorManager.grey,
               foregroundColor: ColorManager.white,
+              actions: [
+                IconButton(
+                  icon: const Icon(Icons.more_vert_sharp),
+                  onPressed: () {},
+                ),
+              ],
             ),
             body: Stack(
               children: [

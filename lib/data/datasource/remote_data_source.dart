@@ -58,7 +58,9 @@ class RemoteDataSourceImpl implements RemoteDataSource {
       "messages": [
         {
           "role": "user",
-          "content": "translate this message to $friendLanguage : '$myMessage'",
+          // "content": "translate this message to $friendLanguage : '$myMessage'",
+          "content": "translate only the text part of this message to $friendLanguage: $myMessage"
+          // "content": "other language: $myMessage ,$friendLanguage:"
         },
       ],
       "temperature": 0.7

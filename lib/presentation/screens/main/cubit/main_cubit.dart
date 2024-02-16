@@ -128,7 +128,7 @@ class MainCubit extends Cubit<MainStates> {
     }
   }
 
-  AlignmentGeometry alignment = Alignment.centerRight;
+  Alignment alignment = Alignment.centerRight;
   int nbr = 0;
 
   void changeLogoAlignment() {
