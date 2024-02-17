@@ -6,6 +6,7 @@ import 'package:chat_translator/presentation/components/styles_manager.dart';
 import 'package:chat_translator/presentation/components/widgets.dart';
 import 'package:chat_translator/presentation/screens/auth/register/cubit/register_cubit.dart';
 import 'package:chat_translator/presentation/screens/auth/register/cubit/register_states.dart';
+import 'package:chat_translator/presentation/screens/main/cubit/main_cubit.dart';
 import 'package:chat_translator/presentation/screens/main/view/main_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -28,6 +29,8 @@ class RegisterView extends StatelessWidget {
             errorToast(state.error).show(context);
           }
           if (state is RegisterAddNewUserSuccessState) {
+            MainCubit mainCubit = BlocProvider.of<MainCubit>(context);
+            mainCubit.getAllUsers();
             Navigator.pushAndRemoveUntil(
                 context,
                 MaterialPageRoute(

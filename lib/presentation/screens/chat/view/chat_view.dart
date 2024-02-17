@@ -33,7 +33,6 @@ class _ChatViewState extends State<ChatView> {
         listener: (context, state) {},
         builder: (context, state) {
           var cubit = ChatCubit.get(context);
-          // cubit.getMessages(reciverId: widget.friendData.id, myId: widget.myData.id);
           return Scaffold(
             backgroundColor: ColorManager.whiteGrey,
             appBar: AppBar(

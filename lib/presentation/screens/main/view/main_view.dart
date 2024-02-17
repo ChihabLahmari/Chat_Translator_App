@@ -48,7 +48,6 @@ class _MainViewState extends State<MainView> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    print('build _MainViewState');
     TabController tabController = TabController(length: 3, vsync: this);
     return Scaffold(
       backgroundColor: ColorManager.white,
@@ -123,7 +122,6 @@ class CustomDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('build Drawer');
     return BlocConsumer<MainCubit, MainStates>(
       buildWhen: (previous, current) {
         return current is MainGetMyUserState;
@@ -266,8 +264,6 @@ class UserListview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('build UserListview');
-
     return BlocConsumer<MainCubit, MainStates>(
       buildWhen: (previous, current) {
         return previous is MainGetAllUsersLoadingState ||
