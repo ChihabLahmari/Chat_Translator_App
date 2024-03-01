@@ -1,3 +1,4 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:chat_translator/domain/entities/entities.dart';
 import 'package:chat_translator/presentation/components/appsize.dart';
 import 'package:chat_translator/presentation/components/assets_manager.dart';
@@ -43,23 +44,29 @@ class _ChatViewState extends State<ChatView> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  CircleAvatar(
-                    backgroundColor: widget.friendData.image == '1' ? ColorManager.purple : ColorManager.blue,
-                    child: Center(
-                      child: Image(image: AssetImage(PresentationConstances.getImage(widget.friendData.image))),
+                  FadeInDown(
+                    child: CircleAvatar(
+                      backgroundColor: widget.friendData.image == '1' ? ColorManager.purple : ColorManager.blue,
+                      child: Center(
+                        child: Image(image: AssetImage(PresentationConstances.getImage(widget.friendData.image))),
+                      ),
                     ),
                   ),
                   SizedBox(width: AppSize.s12.sp),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        widget.friendData.fullName,
-                        style: getRegularStyle(color: ColorManager.dark),
+                      FadeInLeft(
+                        child: Text(
+                          widget.friendData.fullName,
+                          style: getRegularStyle(color: ColorManager.dark),
+                        ),
                       ),
-                      Text(
-                        widget.friendData.firstLanguage,
-                        style: getMeduimStyle(color: ColorManager.orange).copyWith(fontWeight: FontWeight.normal),
+                      FadeInRight(
+                        child: Text(
+                          widget.friendData.firstLanguage,
+                          style: getMeduimStyle(color: ColorManager.orange).copyWith(fontWeight: FontWeight.normal),
+                        ),
                       ),
                     ],
                   ),
@@ -70,9 +77,11 @@ class _ChatViewState extends State<ChatView> {
               shadowColor: ColorManager.grey,
               foregroundColor: ColorManager.white,
               actions: [
-                IconButton(
-                  icon: const Icon(Icons.more_vert_sharp),
-                  onPressed: () {},
+                FadeInRight(
+                  child: IconButton(
+                    icon: const Icon(Icons.more_vert_sharp),
+                    onPressed: () {},
+                  ),
                 ),
               ],
             ),

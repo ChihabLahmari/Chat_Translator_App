@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:animate_do/animate_do.dart';
 import 'package:chat_translator/domain/entities/entities.dart';
 import 'package:chat_translator/presentation/components/appsize.dart';
 import 'package:chat_translator/presentation/components/assets_manager.dart';
@@ -372,45 +373,47 @@ class UserListtile extends StatelessWidget {
         child: Row(
           // mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            Stack(
-              alignment: Alignment.bottomRight,
-              children: [
-                CircleAvatar(
-                  backgroundColor: PresentationConstances.getImageColor(user.image),
-                  minRadius: AppSize.s35.sp,
-                  maxRadius: AppSize.s35.sp,
-                  child: Center(
-                    child: Image(image: AssetImage(PresentationConstances.getImage(user.image))),
+            FadeInLeft(
+              child: Stack(
+                alignment: Alignment.bottomRight,
+                children: [
+                  CircleAvatar(
+                    backgroundColor: PresentationConstances.getImageColor(user.image),
+                    minRadius: AppSize.s35.sp,
+                    maxRadius: AppSize.s35.sp,
+                    child: Center(
+                      child: Image(image: AssetImage(PresentationConstances.getImage(user.image))),
+                    ),
                   ),
-                ),
-                StreamBuilder(
-                  stream: cubit.getIsUserOnline(user.id),
-                  builder: (context, snapshot) {
-                    if (snapshot.data == true) {
-                      cubit.addOnlineUser(user.id);
-                      return Container(
-                        width: AppSize.s20.sp,
-                        height: AppSize.s20.sp,
-                        decoration: BoxDecoration(
-                          color: ColorManager.white,
-                          borderRadius: BorderRadius.circular(AppPadding.p12.sp),
-                        ),
-                        child: Padding(
-                          padding: EdgeInsets.all(AppPadding.p2.sp),
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: ColorManager.green,
-                              borderRadius: BorderRadius.circular(AppPadding.p12.sp),
+                  StreamBuilder(
+                    stream: cubit.getIsUserOnline(user.id),
+                    builder: (context, snapshot) {
+                      if (snapshot.data == true) {
+                        cubit.addOnlineUser(user.id);
+                        return Container(
+                          width: AppSize.s20.sp,
+                          height: AppSize.s20.sp,
+                          decoration: BoxDecoration(
+                            color: ColorManager.white,
+                            borderRadius: BorderRadius.circular(AppPadding.p12.sp),
+                          ),
+                          child: Padding(
+                            padding: EdgeInsets.all(AppPadding.p2.sp),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: ColorManager.green,
+                                borderRadius: BorderRadius.circular(AppPadding.p12.sp),
+                              ),
                             ),
                           ),
-                        ),
-                      );
-                    } else {
-                      return const SizedBox();
-                    }
-                  },
-                ),
-              ],
+                        );
+                      } else {
+                        return const SizedBox();
+                      }
+                    },
+                  ),
+                ],
+              ),
             ),
             SizedBox(
               width: AppSize.s15.sp,
@@ -421,29 +424,31 @@ class UserListtile extends StatelessWidget {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            user.fullName,
-                            style: getRegularStyle(color: ColorManager.dark),
-                          ),
-                          Row(
-                            children: [
-                              Icon(
-                                Icons.language_sharp,
-                                size: AppSize.s18.sp,
-                              ),
-                              SizedBox(width: AppPadding.p4.sp),
-                              Text(
-                                user.firstLanguage,
-                                style: getMeduimStyle(color: ColorManager.dark).copyWith(
-                                  fontWeight: FontWeight.normal,
+                      FadeInRight(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              user.fullName,
+                              style: getRegularStyle(color: ColorManager.dark),
+                            ),
+                            Row(
+                              children: [
+                                Icon(
+                                  Icons.language_sharp,
+                                  size: AppSize.s18.sp,
                                 ),
-                              ),
-                            ],
-                          )
-                        ],
+                                SizedBox(width: AppPadding.p4.sp),
+                                Text(
+                                  user.firstLanguage,
+                                  style: getMeduimStyle(color: ColorManager.dark).copyWith(
+                                    fontWeight: FontWeight.normal,
+                                  ),
+                                ),
+                              ],
+                            )
+                          ],
+                        ),
                       ),
                       SizedBox(
                         height: AppSize.s5.sp,
@@ -464,21 +469,25 @@ class UserListtile extends StatelessWidget {
                                 children: [
                                   Flexible(
                                     flex: 4,
-                                    child: Text(
-                                      lastMessage.text == '' ? 'No messages' : lastMessage.text,
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: getMeduimStyle(color: ColorManager.darkGrey.withOpacity(0.8)),
+                                    child: FadeInRight(
+                                      child: Text(
+                                        lastMessage.text == '' ? 'No messages' : lastMessage.text,
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: getMeduimStyle(color: ColorManager.darkGrey.withOpacity(0.8)),
+                                      ),
                                     ),
                                   ),
                                   Flexible(
                                     flex: 1,
-                                    child: Text(
-                                      lastMessage.dateTime == '' ? "" : cubit.extractTime(lastMessage.dateTime),
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: getMeduimStyle(color: ColorManager.dark)
-                                          .copyWith(fontWeight: FontWeight.normal),
+                                    child: FadeInRight(
+                                      child: Text(
+                                        lastMessage.dateTime == '' ? "" : cubit.extractTime(lastMessage.dateTime),
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: getMeduimStyle(color: ColorManager.dark)
+                                            .copyWith(fontWeight: FontWeight.normal),
+                                      ),
                                     ),
                                   ),
                                 ],
