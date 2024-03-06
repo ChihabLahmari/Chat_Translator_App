@@ -1,9 +1,9 @@
 package com.example.chat_translator
 
 import io.flutter.embedding.android.FlutterActivity
-import io.flutter.embedding.android.SplashScreen
+// import io.flutter.embedding.android.SplashScreen
 
 class MainActivity: FlutterActivity() {
 
-    override fun provideSplashScreen(): SplashScreen? = SplashView()
+    // override fun provideSplashScreen(): SplashScreen? = SplashView()
 }

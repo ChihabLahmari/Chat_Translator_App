@@ -25,7 +25,7 @@ if (flutterVersionName == null) {
 
 android {
     namespace "com.example.chat_translator"
-    compileSdkVersion flutter.compileSdkVersion
+    compileSdkVersion 34
     ndkVersion flutter.ndkVersion
 
     compileOptions {
@@ -69,6 +69,6 @@ flutter {
 dependencies {
     implementation platform('com.google.firebase:firebase-bom:32.6.0')
     implementation 'com.google.firebase:firebase-analytics'
-    implementation "com.airbnb.android:lottie:3.5.0"
-    implementation "com.android.support.constraint:constraint-layout:2.0.4"
+    // implementation "com.airbnb.android:lottie:3.5.0"
+    // implementation "com.android.support.constraint:constraint-layout:2.0.4"
 }

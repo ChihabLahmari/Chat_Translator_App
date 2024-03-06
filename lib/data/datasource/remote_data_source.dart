@@ -48,6 +48,7 @@ class RemoteDataSourceImpl implements RemoteDataSource {
 
   @override
   Future<String> translateMsgToFriendLang(String friendLanguage, String myMessage) async {
+    print('translate starts');
     final url = Uri.parse(ApiConstance.baseUrl);
     final headers = {
       "Content-Type": ApiConstance.contentType,
@@ -79,6 +80,8 @@ class RemoteDataSourceImpl implements RemoteDataSource {
       // print(jsonDecode(utf8.decode(response.bodyBytes)));
       return jsonDecode(utf8.decode(response.bodyBytes))["choices"][0]["message"]["content"];
     } else {
+      print('translate error $statusCode ${jsonDecode(utf8.decode(response.bodyBytes))}');
+
       throw ServerException(
         errorMessageModel: ErrorMessageModel.fromJson(jsonDecode(utf8.decode(response.bodyBytes))),
       );
