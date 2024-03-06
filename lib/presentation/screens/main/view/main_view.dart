@@ -7,7 +7,6 @@ import 'package:chat_translator/presentation/components/assets_manager.dart';
 import 'package:chat_translator/presentation/components/color_manager.dart';
 import 'package:chat_translator/presentation/components/constances.dart';
 import 'package:chat_translator/presentation/components/font_manager.dart';
-import 'package:chat_translator/presentation/components/page_transition.dart';
 import 'package:chat_translator/presentation/components/strings_manager.dart';
 import 'package:chat_translator/presentation/components/styles_manager.dart';
 import 'package:chat_translator/presentation/components/widgets.dart';
@@ -135,6 +134,7 @@ class CustomDrawer extends StatelessWidget {
           child: SafeArea(
             child: Column(
               children: [
+                SizedBox(height: AppSize.s15.sp),
                 CircleAvatar(
                   backgroundColor: PresentationConstances.getImageColor(cubit.user?.image ?? '1'),
                   minRadius: AppSize.s50.sp,
@@ -356,15 +356,20 @@ class UserListtile extends StatelessWidget {
       onTap: () {
         if (cubit.user != null) {
           Navigator.push(
-            context,
-            CustomPageTransition(
-              alignment: cubit.alignment,
-              widget: ChatView(
-                friendData: user,
-                myData: cubit.user!,
-              ),
-            ),
-          );
+              context,
+              MaterialPageRoute(
+                builder: (context) => ChatView(friendData: user, myData: cubit.user!),
+              ));
+          // Navigator.push(
+          //   context,
+          //   CustomPageTransition(
+          //     alignment: cubit.alignment,
+          //     widget: ChatView(
+          //       friendData: user,
+          //       myData: cubit.user!,
+          //     ),
+          //   ),
+          // );
         }
       },
       child: Container(

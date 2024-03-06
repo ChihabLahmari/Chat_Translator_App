@@ -116,7 +116,7 @@ class StreamChatBuilder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(bottom: AppPadding.p100.sp, right: AppPadding.p8.sp, left: AppPadding.p8.sp),
+      padding: EdgeInsets.only(bottom: AppPadding.p120.sp, right: AppPadding.p8.sp, left: AppPadding.p8.sp),
       child: Column(
         children: [
           Expanded(
