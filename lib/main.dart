@@ -31,6 +31,8 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     AppPrefernces appPrefernces = AppPrefernces(getIt());
 
+    appPrefernces.removeUserWatchOnBoarding();
+
     bool isUserLoggedIn = appPrefernces.isUserLoggedIn();
     return MultiBlocProvider(
       providers: [
