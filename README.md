@@ -1,4 +1,4 @@
-### Food Delivery App :
+### Chat translator App :
 
  [Watch the App Demo Video](https://youtu.be/UkD3GwPZEHU)
 
